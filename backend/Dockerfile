@@ -1,4 +1,9 @@
-FROM openjdk:21-slim
+FROM maven:3.9.6-eclipse-temurin-21
+
 WORKDIR /app
-COPY target/backend-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["./mvnw", "spring-boot:run"]

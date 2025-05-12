@@ -1,8 +1,15 @@
-FROM node:18-alpine as build
-WORKDIR /app
-COPY . .
-RUN npm install
-RUN npm run build -- --configuration=production
+# For development only
+FROM node:18
 
-FROM nginx:alpine
-COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 4200
+
+CMD ["npm", "run", "start"]
+

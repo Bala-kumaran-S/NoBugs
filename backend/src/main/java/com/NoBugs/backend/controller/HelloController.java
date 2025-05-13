@@ -15,4 +15,9 @@ public class HelloController {
     public String work() {
         return "Backend is working! right";
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "testing 1 2 3";
+    }
 }

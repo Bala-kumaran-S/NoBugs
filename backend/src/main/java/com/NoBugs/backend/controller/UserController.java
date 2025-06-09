@@ -1,7 +1,8 @@
 package com.NoBugs.backend.controller;
 
+import com.NoBugs.backend.dto.UserDTO;
 import com.NoBugs.backend.entity.User;
-import com.NoBugs.backend.repository.UserRepository;
+import com.NoBugs.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -14,24 +15,36 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id)
-                .map(user -> ResponseEntity.ok().body(user))
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        return userService.getUserById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (!userRepository.existsById(id)) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        userRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return userService.deleteUser(id)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

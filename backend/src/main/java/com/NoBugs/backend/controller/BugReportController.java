@@ -1,13 +1,22 @@
 package com.NoBugs.backend.controller;
 
-import com.NoBugs.backend.entity.BugReport;
-import com.NoBugs.backend.entity.BugStatus;
-import com.NoBugs.backend.repository.BugReportRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.NoBugs.backend.dto.BugReportDTO;
+import com.NoBugs.backend.entity.BugReport;
+import com.NoBugs.backend.service.BugReportService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/bugs")
@@ -15,21 +24,15 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BugReportController {
 
-    private final BugReportRepository bugReportRepository;
+    private final BugReportService bugReportService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BugReport> submitBug(@RequestBody BugReport bug) {
-        bug.setStatus(BugStatus.SUBMITTED);
-        return ResponseEntity.status(HttpStatus.CREATED).body(bugReportRepository.save(bug));
+    public ResponseEntity<BugReport> submitBugReport(@RequestBody BugReportDTO bugReportDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(bugReportService.submitBugReport(bugReportDTO));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BugReport>> getAllReports() {
-        return ResponseEntity.ok(bugReportRepository.findAll());
-    }
-
-    @GetMapping(value = "/reporter/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<BugReport>> getBugsByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(bugReportRepository.findByReporterId(userId));
+    public ResponseEntity<List<BugReport>> getAllBugReports() {
+        return ResponseEntity.ok(bugReportService.getAllBugReports());
     }
 }

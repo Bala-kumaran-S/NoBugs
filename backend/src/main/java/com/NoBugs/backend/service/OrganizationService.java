@@ -37,4 +37,6 @@ public class OrganizationService {
     public List<Organization> getAllOrganizations() {
         return orgRepo.findAll();
     }
-}
+
+    
+    }

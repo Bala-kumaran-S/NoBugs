@@ -1,0 +1,24 @@
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label>Username:</label>
+    <input formControlName="username" />
+    <div *ngIf="submitted && registrationForm.controls.username.invalid">
+      Username is required (max 100 chars).
+    </div>
+  </div>
+  <div>
+    <label>Email:</label>
+    <input formControlName="email" type="email" />
+    <div *ngIf="submitted && registrationForm.controls.email.invalid">
+      Valid email is required (max 255 chars).
+    </div>
+  </div>
+  <div>
+    <label>Password:</label>
+    <input formControlName="password" type="password" />
+    <div *ngIf="submitted && registrationForm.controls.password.invalid">
+      Password is required (min 6 chars).
+    </div>
+  </div>
+  <button type="submit">Register</button>
+</form>

@@ -35,4 +35,5 @@ public class OrganizationController {
     public ResponseEntity<List<Organization>> getAllOrgs() {
         return ResponseEntity.ok(orgService.getAllOrganizations());
     }
+
 }

@@ -1,7 +1,6 @@
 package com.NoBugs.backend.dto;
 
 import com.NoBugs.backend.entity.Severity;
-import com.NoBugs.backend.entity.BugStatus;
 import lombok.Data;
 
 @Data

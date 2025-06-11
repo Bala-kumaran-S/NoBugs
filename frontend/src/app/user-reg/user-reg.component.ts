@@ -25,7 +25,7 @@ export class UserRegComponent {
     this.submitted = true;
     if (this.registrationForm.valid) {
       // Replace with your backend API endpoint
-      const apiUrl = 'http://localhost:8080/api/users';
+      const apiUrl = 'http://localhost:8080/api/auth/register';
       this.http.post(apiUrl, this.registrationForm.value).subscribe({
         next: (response) => {
           console.log('Registration successful:', response);

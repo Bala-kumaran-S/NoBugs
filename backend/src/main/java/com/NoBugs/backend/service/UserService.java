@@ -1,14 +1,16 @@
 package com.NoBugs.backend.service;
 
-import com.NoBugs.backend.dto.UserDTO;
-import com.NoBugs.backend.entity.User;
-import com.NoBugs.backend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.NoBugs.backend.dto.UserDTO;
+import com.NoBugs.backend.entity.User;
+import com.NoBugs.backend.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class UserService {
     }
 
     public UserDTO createUser(User user) {
-        // You can hash password here if needed
+        
         User saved = userRepository.save(user);
         return mapToDTO(saved);
     }
@@ -50,5 +52,13 @@ public class UserService {
 
     private UserDTO mapToDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getReputationPoints());
+    }
+
+    public Optional<UserDTO> getUserByUsername(String username) {
+        return userRepository.findByUsername(username).map(this::mapToDTO);
+    }
+
+    public Optional<User> findbyEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

@@ -1,8 +1,11 @@
 package com.NoBugs.backend.entity;
 
+import com.NoBugs.backend.entity.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -59,11 +63,9 @@ public class User {
     // Defines a many-to-many relationship with the Role entity.
     // FetchType.LAZY means roles are loaded only when accessed.
     // CascadeType.ALL means all operations (persist, merge, remove) propagate to associated roles.
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // EAGER fetch for roles for simpler security context loading
-    @JoinTable(name = "user_roles", // Specifies the join table for this many-to-many relationship
-            joinColumns = @JoinColumn(name = "user_id"),         // Foreign key in user_roles table pointing to users table
-            inverseJoinColumns = @JoinColumn(name = "role_id")) // Foreign key in user_roles table pointing to roles table
-    private Set<Role> roles = new HashSet<>(); // Use HashSet for efficient lookup of roles
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role; 
 
     /**
      * Callback method executed before the entity is persisted (inserted) into the database.

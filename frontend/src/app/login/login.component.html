@@ -2,14 +2,14 @@
   <div>
     <label>Email:</label>
     <input formControlName="email" type="email" />
-    <div *ngIf="submitted && loginForm.controls.email.invalid">
+    <div *ngIf="submitted && loginForm.controls['email'].invalid">
       Valid email is required.
     </div>
   </div>
   <div>
     <label>Password:</label>
     <input formControlName="password" type="password" />
-    <div *ngIf="submitted && loginForm.controls.password.invalid">
+    <div *ngIf="submitted && loginForm.controls['password'].invalid">
       Password is required.
     </div>
   </div>

@@ -1,0 +1,12 @@
+.dashboard-container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+.status { margin-bottom: 1rem; }
+.status.approved { color: green; }
+.status.pending { color: orange; }
+.status.rejected { color: red; }
+section { margin-bottom: 2rem; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ddd; padding: 0.5rem; }
+th { background: #f5f5f5; }
+.scope-actions button { margin-left: 0.5rem; }
+.error { color: red; margin-top: 1rem; }
+.loading { text-align: center; font-size: 1.2rem; }

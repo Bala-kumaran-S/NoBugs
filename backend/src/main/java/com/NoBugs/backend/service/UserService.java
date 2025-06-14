@@ -1,9 +1,13 @@
 package com.NoBugs.backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.NoBugs.backend.dto.UserDTO;
@@ -14,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -51,7 +55,7 @@ public class UserService {
     }
 
     private UserDTO mapToDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getReputationPoints());
+        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getReputationPoints(), user.getRole().name());
     }
 
     public Optional<UserDTO> getUserByUsername(String username) {
@@ -60,5 +64,26 @@ public class UserService {
 
     public Optional<User> findbyEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return new org.springframework.security.core.userdetails.User(
+            user.getUsername(),
+            user.getPassword(),
+            new ArrayList<>() // or user.getRoles() if you have authorities
+        );
+    }
+
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        return new org.springframework.security.core.userdetails.User(
+            user.getEmail(), // or user.getUsername() if you prefer
+            user.getPassword(),
+            new ArrayList<>() // or user.getRoles() if you have authorities
+        );
     }
 }

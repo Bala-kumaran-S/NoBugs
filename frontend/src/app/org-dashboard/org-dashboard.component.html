@@ -1,28 +1,28 @@
 <div class="dashboard-container" *ngIf="!loading; else loadingTpl">
   <h1>Welcome, {{ organization?.name }}</h1>
-  <div class="status" [ngClass]="approvalStatus.toLowerCase()">
-    Approval Status: <strong>{{ approvalStatus }}</strong>
+  <div class="status" [ngClass]="approvalStatus">
+    Approval Status: <strong>{{ organization?.isApproved  }}</strong>
   </div>
 
   <section class="org-info">
     <h2>Organization Info</h2>
-    <p><strong>Email:</strong> {{ organization?.email }}</p>
-    <p><strong>Registered At:</strong> {{ organization?.registeredAt | date }}</p>
+    <p><strong>Email:</strong> {{ organization?.contactEmail }}</p>
+    <p><strong>Registered At:</strong> {{ organization?.createdAt }}</p>
     <p><strong>Description:</strong> {{ organization?.description }}</p>
   </section>
 
   <section class="scopes">
     <h2>Scopes</h2>
-    <button routerLink="/organization/scopes">Manage Scopes</button>
+    <button routerLink="/scopes">Manage Scopes</button>
     <ul>
       <li *ngFor="let scope of scopes">
         <strong>{{ scope.name }}</strong> - {{ scope.description }}
         <span class="scope-actions">
-          <button [routerLink]="['/organization/scopes', scope.id, 'edit']">Edit</button>
+          <button [routerLink]="['/org/scopes', scope.id, 'edit']">Edit</button>
         </span>
       </li>
     </ul>
-    <button routerLink="/organization/scopes/add">Add New Scope</button>
+    <button routerLink="/dashboard/org/scopes/add">Add New Scope</button>
   </section>
 
   <section class="bugs">
@@ -47,7 +47,7 @@
           <td>{{ bug.researcherName }}</td>
           <td>{{ bug.status }}</td>
           <td>{{ bug.severity || 'Unassigned' }}</td>
-          <td>{{ bug.submittedAt | date:'short' }}</td>
+          <td>{{ bug.submittedAt }}</td>
           <td>
             <button [routerLink]="['/organization/bugs', bug.id]">Review</button>
           </td>

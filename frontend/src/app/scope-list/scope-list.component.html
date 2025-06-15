@@ -1,0 +1,14 @@
+<div *ngIf="loading">Loading scopes...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+<div *ngIf="!loading">
+  <h2>Scopes</h2>
+  <button routerLink="/organization/scopes/add">Add New Scope</button>
+  <ul>
+    <li *ngFor="let scope of scopes">
+      <strong>{{ scope.title }}</strong> - {{ scope.description }}
+      <button (click)="onEdit(scope)">Edit</button>
+      <button (click)="onDelete(scope)">Delete</button>
+    </li>
+  </ul>
+  <div *ngIf="scopes.length === 0">No scopes yet.</div>
+</div>

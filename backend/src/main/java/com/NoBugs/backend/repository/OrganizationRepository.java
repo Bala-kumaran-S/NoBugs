@@ -1,9 +1,12 @@
 package com.NoBugs.backend.repository;
 
-import com.NoBugs.backend.entity.Organization;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.NoBugs.backend.entity.Organization;
+import com.NoBugs.backend.entity.User;
 
 /**
  * Spring Data JPA repository for the Organization entity.
@@ -27,10 +30,10 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
     List<Organization> findByIsApprovedFalse();
 
     /**
-     * Finds all Organizations registered by a specific user.
+     * Finds an Organization by the email of the user who registered it.
      *
-     * @param registeredById The ID of the user who registered the organization.
-     * @return A list of Organizations registered by the specified user.
+     * @param email The email of the user who registered the organization.
+     * @return An Optional containing the Organization if found, or empty otherwise.
      */
-    List<Organization> findByRegisteredById(Long registeredById);
+    Optional<Organization> findByRegisteredBy_Email(String email);
 }

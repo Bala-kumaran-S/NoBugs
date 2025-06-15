@@ -1,0 +1,41 @@
+<div class="scope-form-container">
+  <h2>{{ isEdit ? 'Edit Scope' : 'Add Scope' }}</h2>
+  <form [formGroup]="scopeForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Title:</label>
+      <input formControlName="title" />
+      <div *ngIf="submitted && f.title.invalid" class="error">
+        Title is required (max 255 chars).
+      </div>
+    </div>
+    <div>
+      <label>Target URL:</label>
+      <input formControlName="targetUrl" />
+      <div *ngIf="submitted && f.targetUrl.invalid" class="error">
+        Target URL is required (max 2048 chars).
+      </div>
+    </div>
+    <div>
+      <label>Description:</label>
+      <textarea formControlName="description"></textarea>
+    </div>
+    <div>
+      <label>In-Scope Rules:</label>
+      <textarea formControlName="inScopeRules"></textarea>
+    </div>
+    <div>
+      <label>Out-of-Scope Rules:</label>
+      <textarea formControlName="outOfScopeRules"></textarea>
+    </div>
+    <div>
+      <label>Type:</label>
+      <select formControlName="type">
+        <option value="PUBLIC">Public</option>
+        <option value="PRIVATE">Private</option>
+      </select>
+    </div>
+    <button type="submit">{{ isEdit ? 'Update' : 'Add' }} Scope</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="success" class="success">{{ success }}</div>
+  </form>
+</div>

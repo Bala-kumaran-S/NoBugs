@@ -1,0 +1,32 @@
+.org-create-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+label {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+input, textarea {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+}
+.error {
+  color: #d32f2f;
+  font-size: 0.9rem;
+}
+.success {
+  color: #388e3c;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}

@@ -1,5 +1,7 @@
 package com.NoBugs.backend.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,8 +14,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * Represents an organization (e.g., college, department, project team, or even an individual student's project)
@@ -42,9 +42,13 @@ public class Organization {
 
     // Many-to-one relationship with the User entity.
     // The user who registered this organization.
-    @ManyToOne // An organization is registered by one user.
-    @JoinColumn(name = "registered_by_user_id", nullable = false) // Specifies the foreign key column in the organizations table
-    private User registeredBy; // The User object representing the registrant
+     // Specifies the foreign key column in the organizations table
+    @Column(name = "registered_by_email")
+    private String registeredByEmail; // The User object representing the registrant
+
+    @ManyToOne
+    @JoinColumn(name = "registered_by_user_id") // column name in your table
+    private User registeredBy;
 
     @Column(nullable = false, updatable = false) // Maps to a database column; cannot be null, not updatable after creation
     private LocalDateTime createdAt; // Timestamp when the organization was registered

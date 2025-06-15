@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { OrganizationService } from '../services/organization.service';
 import { BugService } from '../services/bug.service';
 import { ScopeService } from '../services/scope.service';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-org-dashboard',
   templateUrl: './org-dashboard.component.html',
-  styleUrls: ['./org-dashboard.component.css']
+  styleUrls: ['./org-dashboard.component.css'],
+  standalone: true,
+  imports: [CommonModule, RouterModule]
 })
 export class OrgDashboardComponent implements OnInit {
   organization: any;
@@ -45,7 +49,7 @@ export class OrgDashboardComponent implements OnInit {
   }
 
   loadScopes() {
-    this.scopeService.getMyScopes().subscribe({
+    this.scopeService.getScopes().subscribe({
       next: scopes => this.scopes = scopes,
       error: () => this.error = 'Failed to load scopes.'
     });

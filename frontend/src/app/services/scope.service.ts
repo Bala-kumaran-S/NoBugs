@@ -1,32 +1,57 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Scope {
-  id: number;
-  name: string;
-  description: string;
+export interface ScopeDTO {
+  id?: number;
+  organizationId?: number;
+  title: string;
+  targetUrl: string;
+  description?: string;
+  inScopeRules?: string;
+  outOfScopeRules?: string;
+  type: 'PUBLIC' | 'PRIVATE';
+  createdAt?: string;
+  lastUpdatedAt?: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ScopeService {
-  private apiUrl = '/api/organization/scopes';
+  private apiUrl = 'http://localhost:8080/api/orgs/scopes';
 
   constructor(private http: HttpClient) {}
 
-  getMyScopes(): Observable<Scope[]> {
-    return this.http.get<Scope[]>(this.apiUrl);
+  getScopes(): Observable<ScopeDTO[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<ScopeDTO[]>(this.apiUrl, { headers });
   }
 
-  addScope(scope: Partial<Scope>): Observable<Scope> {
-    return this.http.post<Scope>(this.apiUrl, scope);
+  addScope(scope: ScopeDTO): Observable<ScopeDTO> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post<ScopeDTO>(this.apiUrl, scope, { headers });
   }
 
-  editScope(scopeId: number, scope: Partial<Scope>): Observable<Scope> {
-    return this.http.put<Scope>(`${this.apiUrl}/${scopeId}`, scope);
+  updateScope(id: number, scope: ScopeDTO): Observable<ScopeDTO> {
+    const token = localStorage.getItem('token');
+     
+
+
+                                                                     
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.put<ScopeDTO>(`${this.apiUrl}/${id}`, scope, { headers });
   }
 
-  deleteScope(scopeId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${scopeId}`);
+  deleteScope(id: number): Observable<void> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
+  }
+
+  getScopeById(id: number): Observable<ScopeDTO> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<ScopeDTO>(`${this.apiUrl}/${id}`, { headers });
   }
 }

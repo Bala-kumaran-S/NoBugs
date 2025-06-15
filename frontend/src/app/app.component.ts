@@ -6,6 +6,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, UserRegComponent, ReactiveFormsModule],

@@ -16,6 +16,8 @@ import com.NoBugs.backend.dto.BugReportDTO;
 import com.NoBugs.backend.service.BugReportService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/api/researcher/bugs")
@@ -46,6 +48,15 @@ public class BugReportController {
     @GetMapping("/org/{orgId}")
     public ResponseEntity<List<BugReportDTO>> getBugsByOrg(@PathVariable Long orgId) {
         return ResponseEntity.ok(bugReportService.getBugsByOrganization(orgId));
+    }
+
+    
+    // PUT http:localhost:8080/api/researcher/bugs/        
+            
+    @PutMapping("/{id}")
+    public ResponseEntity<BugReportDTO> updateBug(@PathVariable Long id, @RequestBody BugReportDTO dto) {
+        BugReportDTO updatedBug = bugReportService.updateBug(id, dto);
+        return ResponseEntity.ok(updatedBug);
     }
 
 }

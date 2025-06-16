@@ -91,4 +91,23 @@ public class BugReportService {
         List<BugReport> bugs = bugReportRepo.findByScope_OrganizationId(orgId);
         return bugs.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
+
+    // Update a bug report
+    public BugReportDTO updateBug(Long id, BugReportDTO dto) {
+        BugReport bug = bugReportRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Bug report not found"));
+
+        // Update fields as needed
+        bug.setTitle(dto.getTitle());
+        bug.setDescription(dto.getDescription());
+        bug.setReporterSeverity(dto.getReporterSeverity());
+        bug.setAdminSeverity(dto.getAdminSeverity());
+        bug.setAffectedEndpoint(dto.getAffectedEndpoint());
+        bug.setStepsToReproduce(dto.getStepsToReproduce());
+        bug.setAttachmentUrl1(dto.getAttachmentUrl1());
+        bug.setAdminNotes(dto.getAdminNotes());
+
+        BugReport updated = bugReportRepo.save(bug);
+        return mapToDTO(updated);
+    }
 }

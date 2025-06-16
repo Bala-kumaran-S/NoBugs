@@ -36,6 +36,6 @@ export class OrganizationService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-    return this.http.post<Organization>(`${this.apiUrl}/register`, data, { headers });
+    return this.http.post<Organization>(`${this.apiUrl}/register`, data , { headers });
   }
 }

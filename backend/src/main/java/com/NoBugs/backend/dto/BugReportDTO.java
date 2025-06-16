@@ -11,6 +11,7 @@ public class BugReportDTO {
     private Long id;
     private String uniqueId;
     private Long scopeId;
+    private Long reporter;
     private String scopeTitle;
     private String organizationName;
     private String title;

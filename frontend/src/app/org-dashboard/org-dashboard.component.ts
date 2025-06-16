@@ -39,6 +39,7 @@ export class OrgDashboardComponent implements OnInit {
         this.approvalStatus = org.approvalStatus;
         this.loadScopes();
         this.loadBugs();
+        console.log('Loaded organization:', this.organization);
         this.loading = false;
       },
       error: err => {
@@ -49,14 +50,17 @@ export class OrgDashboardComponent implements OnInit {
   }
 
   loadScopes() {
-    this.scopeService.getScopes().subscribe({
-      next: scopes => this.scopes = scopes,
+    this.scopeService.getScopesByOrganizationId(this.organization.id).subscribe({
+      next: scopes => {
+        this.scopes = scopes
+      },
       error: () => this.error = 'Failed to load scopes.'
     });
   }
 
   loadBugs() {
-    this.bugService.getBugsForMyOrganization().subscribe({
+    this.bugService.getBugsForMyOrganization(this.organization.id).subscribe({
+
       next: bugs => this.bugs = bugs,
       error: () => this.error = 'Failed to load bug reports.'
     });

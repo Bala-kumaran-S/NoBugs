@@ -1,0 +1,49 @@
+<h1>Bug review</h1>
+<div class="bug-report-review-container">
+  <h2>Bug Report Review</h2>
+  <div class="bug-details">
+    <p><strong>Title:</strong> {{ bug?.title }}</p>
+    <p><strong>Description:</strong> {{ bug?.description }}</p>
+    <p><strong>Reported Severity:</strong> {{ bug?.reporterSeverity }}</p>
+    <p><strong>Scope:</strong> {{ bug?.scopeTitle }}</p>
+    <p><strong>Organization:</strong> {{ bug?.organizationName }}</p>
+    <p><strong>Affected Endpoint:</strong> {{ bug?.affectedEndpoint || '-' }}</p>
+    <p><strong>Steps to Reproduce:</strong> {{ bug?.stepsToReproduce }}</p>
+    <p *ngIf="bug.attachmentUrl1"><strong>Attachment:</strong> <a [href]="bug?.attachmentUrl1" target="_blank">View</a></p>
+    <p><strong>Submitted At:</strong> {{ bug?.submittedAt }}</p>
+    <p><strong>Status:</strong> {{ bug?.status }}</p>
+    <p><strong>Admin Severity:</strong> {{ bug?.adminSeverity || '-' }}</p>
+    <p><strong>Admin Notes:</strong> {{ bug?.adminNotes || '-' }}</p>
+  </div>
+
+  <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
+    <div>
+      <label>Status:</label>
+      <select formControlName="status">
+        <option value="SUBMITTED">Submitted</option>
+        <option value="ACCEPTED">Accepted</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
+    </div>
+    <div>
+      <label>Admin Severity:</label>
+      <select formControlName="adminSeverity">
+        <option value="">-- Select --</option>
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+      </select>
+    </div>
+    <div>
+      <label>Admin Notes:</label>
+      <textarea formControlName="adminNotes"></textarea>
+    </div>
+    <button type="submit">Update Bug Report</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="success" class="success">{{ success }}</div>
+  </form>
+</div>
+
+<div *ngIf="loading">Loading bug report...</div>
+<div *ngIf="!loading && !bug" class="error">Bug report not found.</div>

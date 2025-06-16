@@ -11,6 +11,7 @@ import { ScopeListComponent } from './scope-list/scope-list.component';
 import { ScopeAddComponent } from './scope-add/scope-add.component';
 import { SubmitBugComponent } from './submit-bug/submit-bug.component';
 import { MyBugsComponent } from './bug-list/bug-list.component';
+import { BugReportReviewComponent } from './bug-report-review/bug-report-review.component';
 
 export const routes: Routes = [
   {
@@ -36,6 +37,7 @@ export const routes: Routes = [
   { path: 'dashboard/org/scopes/:id/edit', component: ScopeAddComponent },
   { path: 'researcher/bug-report/:scopeId', component: SubmitBugComponent },
   { path: 'researcher/my-bugs', component: MyBugsComponent },
+  { path: 'dashboard/org/bugs/:id/review', component: BugReportReviewComponent },
   { path: '', redirectTo: '/register', pathMatch: 'full' },
 ];
 

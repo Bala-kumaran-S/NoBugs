@@ -43,13 +43,13 @@
       <tbody>
         <tr *ngFor="let bug of bugs | slice:0:5">
           <td>{{ bug.title }}</td>
-          <td>{{ bug.scopeName }}</td>
-          <td>{{ bug.researcherName }}</td>
+          <td>{{ bug.scopeTitle }}</td>
+          <td>{{ bug.reporter }}</td>
           <td>{{ bug.status }}</td>
           <td>{{ bug.severity || 'Unassigned' }}</td>
           <td>{{ bug.submittedAt }}</td>
           <td>
-            <button [routerLink]="['/organization/bugs', bug.id]">Review</button>
+            <button [routerLink]="['/dashboard/org/bugs', bug.id, 'review']">Review</button>
           </td>
         </tr>
       </tbody>

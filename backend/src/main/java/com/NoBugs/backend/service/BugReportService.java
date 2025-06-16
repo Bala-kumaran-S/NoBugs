@@ -63,6 +63,7 @@ public class BugReportService {
         dto.setUniqueId(bug.getUniqueId());
         dto.setScopeId(bug.getScope().getId());
         dto.setScopeTitle(bug.getScope().getTitle());
+        dto.setReporter(bug.getReporter().getId());
         dto.setOrganizationName(bug.getScope().getOrganization().getName());
         dto.setTitle(bug.getTitle());
         dto.setDescription(bug.getDescription());

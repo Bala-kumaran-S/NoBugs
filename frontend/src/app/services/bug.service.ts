@@ -8,6 +8,7 @@ export interface BugReportDTO {
   scopeId: number;
   scopeTitle?: string;
   organizationName?: string;
+  reporter?: number;
   title: string;
   description: string;
   reporterSeverity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
@@ -44,9 +45,15 @@ export class BugReportService {
     return this.http.get<BugReportDTO>(`${this.apiUrl}/${id}`, { headers });
   }
 
-  getBugsForMyOrganization(): Observable<BugReportDTO[]> {
+  getBugsForMyOrganization(id: number): Observable<BugReportDTO[]> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get<BugReportDTO[]>(`${this.apiUrl}/org/1`, { headers });
+    return this.http.get<BugReportDTO[]>(`${this.apiUrl}/org/${id}`, { headers });
+  }
+
+  updateBug(id: number, bug: BugReportDTO): Observable<BugReportDTO> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.put<BugReportDTO>(`${this.apiUrl}/${id}`, bug, { headers });
   }
 }

@@ -23,11 +23,8 @@ export class OrgCreateComponent {
   ) {
     this.orgForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+      contactEmail: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
       description: ['', [Validators.maxLength(500)]]
-
-
-      
     });
   }
 
@@ -44,10 +41,12 @@ export class OrgCreateComponent {
 
     this.orgService.registerOrganization(this.orgForm.value).subscribe({
       next: org => {
+        console.log("registration sucess");
         this.success = 'Organization registered successfully!';
         setTimeout(() => this.router.navigate(['/organization/view']), 1500);
       },
       error: err => {
+        console.log("org reg failed");
         this.error = err.error?.message || 'Registration failed. Please try again.';
       }
     });

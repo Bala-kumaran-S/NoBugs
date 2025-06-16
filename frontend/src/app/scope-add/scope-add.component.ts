@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ScopeService, ScopeDTO } from '../services/scope.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-scope-add',
   templateUrl: './scope-add.component.html',
-  styleUrls: ['./scope-add.component.css']
+  styleUrls: ['./scope-add.component.css'],
+  standalone: true,
+  imports: [ReactiveFormsModule]
 })
 export class ScopeAddComponent implements OnInit {
   scopeForm: FormGroup;
@@ -57,7 +59,7 @@ export class ScopeAddComponent implements OnInit {
       this.scopeService.updateScope(this.scopeId!, scope).subscribe({
         next: () => {
           this.success = 'Scope updated!';
-          setTimeout(() => this.router.navigate(['/organization/scopes']), 1000);
+          setTimeout(() => this.router.navigate(['/org/scopes']), 1000);
         },
         error: err => this.error = err.error?.message || 'Failed to update scope.'
       });
@@ -65,7 +67,7 @@ export class ScopeAddComponent implements OnInit {
       this.scopeService.addScope(scope).subscribe({
         next: () => {
           this.success = 'Scope added!';
-          setTimeout(() => this.router.navigate(['/organization/scopes']), 1000);
+          setTimeout(() => this.router.navigate(['/dashboard/org']), 1000);
         },
         error: err => this.error = err.error?.message || 'Failed to add scope.'
       });

@@ -1,10 +1,13 @@
 package com.NoBugs.backend.repository;
 
-import com.NoBugs.backend.entity.BugReport;
-import com.NoBugs.backend.entity.BugStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
+import com.NoBugs.backend.entity.Scope;
+import com.NoBugs.backend.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.NoBugs.backend.entity.BugReport;
+import com.NoBugs.backend.entity.BugStatus;
 
 /**
  * Spring Data JPA repository for the BugReport entity.
@@ -52,4 +55,17 @@ public interface BugReportRepository extends JpaRepository<BugReport, Long> {
      * @return A list of BugReports matching the given scope and status.
      */
     List<BugReport> findByScopeIdAndStatus(Long scopeId, BugStatus status);
+
+    List<BugReport> findByReporter(User reporter);
+
+    List<BugReport> findByScope(Scope scope);
+
+    /**
+     * Finds all BugReports for a specific organization.
+     *
+     * @param orgId The ID of the organization.
+     * @return A list of BugReports for the specified organization.
+     */
+    List<BugReport> findByScope_OrganizationId(Long orgId);
+
 }

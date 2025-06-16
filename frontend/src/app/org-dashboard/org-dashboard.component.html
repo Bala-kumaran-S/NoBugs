@@ -16,7 +16,7 @@
     <button routerLink="/scopes">Manage Scopes</button>
     <ul>
       <li *ngFor="let scope of scopes">
-        <strong>{{ scope.name }}</strong> - {{ scope.description }}
+        <strong>{{ scope.title }}</strong> - {{ scope.targetUrl }}
         <span class="scope-actions">
           <button [routerLink]="['/org/scopes', scope.id, 'edit']">Edit</button>
         </span>

@@ -1,33 +1,52 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Bug {
-  id: number;
+export interface BugReportDTO {
+  id?: number;
+  uniqueId?: string;
+  scopeId: number;
+  scopeTitle?: string;
+  organizationName?: string;
   title: string;
-  scopeName: string;
-  researcherName: string;
-  status: string;
-  severity: string;
-  submittedAt: string;
-  notes?: string;
+  description: string;
+  reporterSeverity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  adminSeverity?: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  affectedEndpoint?: string;
+  stepsToReproduce: string;
+  attachmentUrl1?: string;
+  submittedAt?: string;
+  status?: string;
+  adminNotes?: string;
 }
 
 @Injectable({ providedIn: 'root' })
-export class BugService {
-  private apiUrl = '/api/organization/bugs';
+export class BugReportService {
+  private apiUrl = 'http://localhost:8080/api/researcher/bugs';
 
   constructor(private http: HttpClient) {}
 
-  getBugsForMyOrganization(): Observable<Bug[]> {
-    return this.http.get<Bug[]>(this.apiUrl);
+  submitBug(bug: BugReportDTO): Observable<BugReportDTO> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post<BugReportDTO>(this.apiUrl, bug, { headers });
   }
 
-  getBugById(bugId: number): Observable<Bug> {
-    return this.http.get<Bug>(`${this.apiUrl}/${bugId}`);
+  getMyBugs(): Observable<BugReportDTO[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<BugReportDTO[]>(this.apiUrl, { headers });
   }
 
-  reviewBug(bugId: number, reviewData: { severity: string; notes: string; reputationPoints: number }): Observable<Bug> {
-    return this.http.post<Bug>(`${this.apiUrl}/${bugId}/review`, reviewData);
+  getBugById(id: number): Observable<BugReportDTO> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<BugReportDTO>(`${this.apiUrl}/${id}`, { headers });
+  }
+
+  getBugsForMyOrganization(): Observable<BugReportDTO[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<BugReportDTO[]>(`${this.apiUrl}/org/1`, { headers });
   }
 }

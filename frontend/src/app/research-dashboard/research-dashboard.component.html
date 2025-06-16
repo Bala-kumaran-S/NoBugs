@@ -1,1 +1,58 @@
-<p>research-dashboard works!</p>
+<div class="dashboard-container">
+  <h1>Researcher Dashboard</h1>
+
+  <section>
+    <h2>Public Organizations & Scopes</h2>
+    <div *ngIf="loadingOrgs">Loading organizations...</div>
+    <div *ngIf="errorOrgs" class="error">{{ errorOrgs }}</div>
+    <div *ngIf="!loadingOrgs && organizations.length === 0">No public organizations found.</div>
+    <div *ngIf="!loadingOrgs && organizations.length > 0">
+      <div *ngFor="let org of organizations" class="org-card">
+        <h3>{{ org.name }}</h3>
+        <p>{{ org.description }}</p>
+        <ul>
+          <li *ngFor="let scope of org.scopes">
+            <strong>{{ scope.title }}</strong> ({{ scope.type }}) - {{ scope.targetUrl }}
+            <button (click)="viewScopes(org)">View Scopes</button>
+            <button (click)="reportBug(scope)">Report Bug</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>My Bug Reports</h2>
+    <div *ngIf="loadingBugs">Loading bug reports...</div>
+    <div *ngIf="errorBugs" class="error">{{ errorBugs }}</div>
+    <div *ngIf="!loadingBugs && bugReports.length === 0">You have not submitted any bug reports yet.</div>
+    <table *ngIf="!loadingBugs && bugReports.length > 0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Scope</th>
+          <th>Organization</th>
+          <th>Status</th>
+          <th>Severity</th>
+          <th>Submitted</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bug of bugReports">
+          <td>{{ bug.title }}</td>
+          <td>{{ bug.scopeTitle }}</td>
+          <td>{{ bug.organizationName }}</td>
+          <td>{{ bug.status }}</td>
+          <td>{{ bug.severity || 'Unassigned' }}</td>
+          <td>{{ bug.submittedAt }}</td>
+          <td>
+            <button (click)="viewBug(bug)">View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+
+</div>

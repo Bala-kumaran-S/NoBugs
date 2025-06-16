@@ -1,0 +1,26 @@
+<p>bug-list works!</p>
+<div *ngIf="loading">Loading bug reports...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+<table *ngIf="!loading && bugs.length > 0">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Scope</th>
+      <th>Organization</th>
+      <th>Status</th>
+      <th>Severity</th>
+      <th>Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let bug of bugs">
+      <td>{{ bug.title }}</td>
+      <td>{{ bug.scopeTitle }}</td>
+      <td>{{ bug.organizationName }}</td>
+      <td>{{ bug.status }}</td>
+      <td>{{ bug.reporterSeverity }}</td>
+      <td>{{ bug.submittedAt }}</td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="!loading && bugs.length === 0">No bug reports submitted yet.</div>

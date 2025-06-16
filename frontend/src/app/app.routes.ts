@@ -9,6 +9,8 @@ import { LoginComponent } from './login/login.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { ScopeListComponent } from './scope-list/scope-list.component';
 import { ScopeAddComponent } from './scope-add/scope-add.component';
+import { SubmitBugComponent } from './submit-bug/submit-bug.component';
+import { MyBugsComponent } from './bug-list/bug-list.component';
 
 export const routes: Routes = [
   {
@@ -29,9 +31,11 @@ export const routes: Routes = [
   { path: 'register', component: UserRegComponent },
   { path: 'login', component: LoginComponent },
   { path: 'users', component: UserListComponent },
-  { path: 'org/scopes', component: ScopeListComponent },
-  { path: 'org/scopes/add', component: ScopeAddComponent },
-  { path: 'org/scopes/:id/edit', component: ScopeAddComponent },
+  { path: 'dashboard/org/scopes', component: ScopeListComponent },
+  { path: 'dashboard/org/scopes/add', component: ScopeAddComponent },
+  { path: 'dashboard/org/scopes/:id/edit', component: ScopeAddComponent },
+  { path: 'researcher/bug-report/:scopeId', component: SubmitBugComponent },
+  { path: 'researcher/my-bugs', component: MyBugsComponent },
   { path: '', redirectTo: '/register', pathMatch: 'full' },
 ];
 

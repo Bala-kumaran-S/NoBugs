@@ -1,9 +1,5 @@
 package com.NoBugs.backend.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.NoBugs.backend.dto.BugReportDTO;
 import com.NoBugs.backend.entity.BugReport;
 import com.NoBugs.backend.entity.Scope;
@@ -11,41 +7,87 @@ import com.NoBugs.backend.entity.User;
 import com.NoBugs.backend.repository.BugReportRepository;
 import com.NoBugs.backend.repository.ScopeRepository;
 import com.NoBugs.backend.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BugReportService {
-
     private final BugReportRepository bugReportRepo;
-    private final UserRepository userRepo;
     private final ScopeRepository scopeRepo;
+    private final UserRepository userRepo;
 
-    public BugReport submitBugReport(BugReportDTO dto) {
-        User reporter = userRepo.findById(dto.getReporterUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + dto.getReporterUserId()));
-
+    // Submit a new bug report
+    public BugReportDTO submitBug(BugReportDTO dto) {
+        User reporter = getCurrentUser();
         Scope scope = scopeRepo.findById(dto.getScopeId())
-                .orElseThrow(() -> new IllegalArgumentException("Scope not found with ID: " + dto.getScopeId()));
+                .orElseThrow(() -> new IllegalArgumentException("Scope not found"));
 
-        BugReport bugReport = new BugReport();
-        bugReport.setReporter(reporter);
-        bugReport.setScope(scope);
-        bugReport.setTitle(dto.getTitle());
-        bugReport.setDescription(dto.getDescription());
-        bugReport.setReporterSeverity(dto.getReporterSeverity());
-        bugReport.setAffectedEndpoint(dto.getAffectedEndpoint());
-        bugReport.setStepsToReproduce(dto.getStepsToReproduce());
-        bugReport.setAttachmentUrl1(dto.getAttachmentUrl1());
-        // status, uniqueId, submittedAt are set automatically in entity
-
-        return bugReportRepo.save(bugReport);
+        BugReport bug = new BugReport();
+        bug.setScope(scope);
+        bug.setReporter(reporter);
+        bug.setTitle(dto.getTitle());
+        bug.setDescription(dto.getDescription());
+        bug.setReporterSeverity(dto.getReporterSeverity());
+        bug.setAffectedEndpoint(dto.getAffectedEndpoint());
+        bug.setStepsToReproduce(dto.getStepsToReproduce());
+        bug.setAttachmentUrl1(dto.getAttachmentUrl1());
+        // status, uniqueId, submittedAt handled by entity
+        BugReport saved = bugReportRepo.save(bug);
+        return mapToDTO(saved);
     }
 
-    public List<BugReport> getAllBugReports() {
-        return bugReportRepo.findAll();
+    // Get all bug reports submitted by the current researcher
+    public List<BugReportDTO> getMyBugReports() {
+        User reporter = getCurrentUser();
+        return bugReportRepo.findByReporter(reporter)
+                .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
-    // You can add more methods for updating status, admin severity, notes, etc.
+    // Get bug report by ID (with access control as needed)
+    public BugReportDTO getBugById(Long id) {
+        BugReport bug = bugReportRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Bug report not found"));
+        return mapToDTO(bug);
+    }
+
+    // Helper: Map entity to DTO
+    private BugReportDTO mapToDTO(BugReport bug) {
+        BugReportDTO dto = new BugReportDTO();
+        dto.setId(bug.getId());
+        dto.setUniqueId(bug.getUniqueId());
+        dto.setScopeId(bug.getScope().getId());
+        dto.setScopeTitle(bug.getScope().getTitle());
+        dto.setOrganizationName(bug.getScope().getOrganization().getName());
+        dto.setTitle(bug.getTitle());
+        dto.setDescription(bug.getDescription());
+        dto.setReporterSeverity(bug.getReporterSeverity());
+        dto.setAdminSeverity(bug.getAdminSeverity());
+        dto.setAffectedEndpoint(bug.getAffectedEndpoint());
+        dto.setStepsToReproduce(bug.getStepsToReproduce());
+        dto.setAttachmentUrl1(bug.getAttachmentUrl1());
+        dto.setSubmittedAt(bug.getSubmittedAt() != null ? bug.getSubmittedAt().toString() : null);
+        dto.setStatus(bug.getStatus());
+        dto.setAdminNotes(bug.getAdminNotes());
+        return dto;
+    }
+
+    // Helper: Get current authenticated user
+    private User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        return userRepo.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + email));
+    }
+
+    // Get all bug reports for a specific organization
+    public List<BugReportDTO> getBugsByOrganization(Long orgId) {
+        List<BugReport> bugs = bugReportRepo.findByScope_OrganizationId(orgId);
+        return bugs.stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
 }

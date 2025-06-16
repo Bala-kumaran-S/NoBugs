@@ -40,6 +40,8 @@ public class Organization {
     @Column(nullable = false, length = 255) // Maps to a database column; cannot be null, max 255 chars
     private String contactEmail;
 
+    @Column(nullable = false)
+    private boolean isPublic = true;
     // Many-to-one relationship with the User entity.
     // The user who registered this organization.
      // Specifies the foreign key column in the organizations table

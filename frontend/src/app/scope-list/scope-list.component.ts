@@ -33,7 +33,7 @@ export class ScopeListComponent implements OnInit {
   }
 
   onEdit(scope: ScopeDTO) {
-    this.router.navigate(['/organization/scopes', scope.id, 'edit']);
+    this.router.navigate(['/org/scopes', scope.id, 'edit']);
   }
 
   onDelete(scope: ScopeDTO) {

@@ -62,4 +62,10 @@ public class OrganizationController {
         ScopeDTO scope = scopeService.createScope(scopeDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(scope);
     }
+
+    @GetMapping(value = "/public", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Organization>> getPublicOrgs() {
+        List<Organization> publicOrgs = orgService.getPublicOrganizations();
+        return ResponseEntity.ok(publicOrgs);
+    }
 }

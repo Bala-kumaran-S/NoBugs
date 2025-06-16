@@ -1,0 +1,46 @@
+<div class="bug-report-form-container">
+  <h2>Submit Bug Report</h2>
+  <form [formGroup]="bugForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label>Title:</label>
+      <input formControlName="title" />
+      <div *ngIf="submitted && f.title.invalid" class="error">
+        Title is required (max 255 chars).
+      </div>
+    </div>
+    <div>
+      <label>Description:</label>
+      <textarea formControlName="description"></textarea>
+      <div *ngIf="submitted && f.description.invalid" class="error">
+        Description is required.
+      </div>
+    </div>
+    <div>
+      <label>Severity:</label>
+      <select formControlName="reporterSeverity">
+        <option value="CRITICAL">Critical</option>
+        <option value="HIGH">High</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="LOW">Low</option>
+      </select>
+    </div>
+    <div>
+      <label>Affected Endpoint (optional):</label>
+      <input formControlName="affectedEndpoint" />
+    </div>
+    <div>
+      <label>Steps to Reproduce:</label>
+      <textarea formControlName="stepsToReproduce"></textarea>
+      <div *ngIf="submitted && f.stepsToReproduce.invalid" class="error">
+        Steps to reproduce are required.
+      </div>
+    </div>
+    <div>
+      <label>Attachment URL (optional):</label>
+      <input formControlName="attachmentUrl1" />
+    </div>
+    <button type="submit">Submit Bug</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="success" class="success">{{ success }}</div>
+  </form>
+</div>

@@ -36,4 +36,13 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
      * @return An Optional containing the Organization if found, or empty otherwise.
      */
     Optional<Organization> findByRegisteredBy_Email(String email);
+
+    
+    /**
+     * Finds all Organizations that are public (i.e., isPublic = true).
+     *
+     * @return A list of public Organizations.
+     */
+    List<Organization> findByIsPublicTrue();
+
 }

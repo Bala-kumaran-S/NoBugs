@@ -80,4 +80,8 @@ public class OrganizationService {
         return userRepo.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
     }
+
+    public List<Organization> getPublicOrganizations() {
+        return orgRepo.findByIsPublicTrue();
+    }
 }

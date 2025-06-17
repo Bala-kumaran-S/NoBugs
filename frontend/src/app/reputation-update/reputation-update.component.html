@@ -1,0 +1,13 @@
+<div class="reputation-update">
+  <label>Reputation Points: {{ points }}</label>
+  <input
+    type="range"
+    [(ngModel)]="points"
+    min="1"
+    max="10"
+    step="1"
+  />
+  <button (click)="updateReputation()">Update</button>
+  <span *ngIf="success" class="success">{{ success }}</span>
+  <span *ngIf="error" class="error">{{ error }}</span>
+</div>

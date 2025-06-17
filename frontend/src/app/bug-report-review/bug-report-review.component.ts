@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BugReportService, BugReportDTO } from '../services/bug.service';
 import { ActivatedRoute } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ReputationUpdateComponent } from '../reputation-update/reputation-update.component';
+import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, ReputationUpdateComponent],
   selector: 'app-bug-report-review',
   templateUrl: './bug-report-review.component.html',
   styleUrls: ['./bug-report-review.component.css']
@@ -18,11 +21,15 @@ export class BugReportReviewComponent implements OnInit {
   error = '';
   success = '';
   reviewForm: FormGroup;
+  
+  @Input() userId!: number | undefined;
+  reputationPoints?: number; // Add this line
 
   constructor(
     private bugService: BugReportService,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private http: HttpClient // Inject HttpClient
   ) {
     this.reviewForm = this.fb.group({
       status: ['SUBMITTED'],
@@ -57,10 +64,24 @@ export class BugReportReviewComponent implements OnInit {
       ...this.bug,
       ...this.reviewForm.value
     };
+
+    // First, update the bug report
     this.bugService.updateBug(this.bug.id!, updated).subscribe({
       next: bug => {
         this.success = 'Bug report updated!';
-        this.bug = bug; 
+        this.bug = bug;
+
+        // Then, update the reputation (if you want to do it automatically)
+        const userId = bug.reporter;
+        if (userId && this.reputationPoints) {
+          const token = localStorage.getItem('token');
+          const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+          this.http.put(`http://localhost:8080/api/users/${userId}/reputation`, { points: this.reputationPoints },  { headers })
+            .subscribe({
+              next: () => this.success += ' Reputation updated!',
+              error: () => this.error = 'Bug updated, but failed to update reputation.'
+            });
+        }
       },
       error: () => this.error = 'Failed to update bug report.'
     });

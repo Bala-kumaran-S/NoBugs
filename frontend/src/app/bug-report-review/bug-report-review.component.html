@@ -39,7 +39,20 @@
       <label>Admin Notes:</label>
       <textarea formControlName="adminNotes"></textarea>
     </div>
-    <button type="submit">Update Bug Report</button>
+    <div class="form-group">
+  <label for="reputationPoints">Reputation Points: {{ reputationPoints }}</label>
+  <input
+    type="range"
+    id="reputationPoints"
+    min="1"
+    max="10"
+    step="1"
+    [(ngModel)]="reputationPoints"
+    name="reputationPoints"
+    style="width: 200px;"
+  />
+</div>
+    <button type="submit" >Update Bug Report</button>
     <div *ngIf="error" class="error">{{ error }}</div>
     <div *ngIf="success" class="success">{{ success }}</div>
   </form>

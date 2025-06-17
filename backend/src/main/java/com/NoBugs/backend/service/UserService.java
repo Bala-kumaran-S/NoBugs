@@ -86,4 +86,11 @@ public class UserService implements UserDetailsService {
             new ArrayList<>() // or user.getRoles() if you have authorities
         );
     }
+
+    public void updateUserReputation(Long userId, Integer points) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    user.setReputationPoints(user.getReputationPoints() + points);
+    userRepository.save(user);
+}
 }

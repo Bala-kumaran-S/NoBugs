@@ -1,13 +1,26 @@
 package com.NoBugs.backend.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.NoBugs.backend.dto.UserDTO;
 import com.NoBugs.backend.entity.User;
 import com.NoBugs.backend.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -46,5 +59,13 @@ public class UserController {
         return userService.deleteUser(id)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    // reputation update
+    @PutMapping("/{userId}/reputation")
+    public ResponseEntity<?> updateReputation(@PathVariable Long userId, @RequestBody Map<String, Integer> body) {
+        Integer points = body.get("points");
+        userService.updateUserReputation(userId, points);
+        return ResponseEntity.ok().build();
     }
 }

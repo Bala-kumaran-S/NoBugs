@@ -6,7 +6,7 @@ package com.NoBugs.backend.entity;
 public enum BugStatus {
     SUBMITTED,       // Initially submitted by a hacker
     IN_REVIEW,       // Under review by an admin
-    VALID,           // Confirmed as a legitimate bug
+    ACCEPTED,        // Confirmed as a legitimate bug
     INVALID,         // Not a legitimate bug or cannot be reproduced
     DUPLICATE,       // Already reported
     INFORMATIONAL,   // Not a bug, but useful information

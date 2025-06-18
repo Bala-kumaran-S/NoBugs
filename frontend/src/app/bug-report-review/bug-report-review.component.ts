@@ -4,13 +4,12 @@ import { BugReportService, BugReportDTO } from '../services/bug.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ReputationUpdateComponent } from '../reputation-update/reputation-update.component';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, ReputationUpdateComponent],
+  imports: [FormsModule, ReactiveFormsModule],
   selector: 'app-bug-report-review',
   templateUrl: './bug-report-review.component.html',
   styleUrls: ['./bug-report-review.component.css']

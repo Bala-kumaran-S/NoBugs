@@ -19,6 +19,7 @@ export class OrgDashboardComponent implements OnInit {
   bugs: any[] = [];
   loading = true;
   error = '';
+  
 
   constructor(
     private orgService: OrganizationService,
@@ -36,7 +37,11 @@ export class OrgDashboardComponent implements OnInit {
     this.orgService.getMyOrganization().subscribe({
       next: org => {
         this.organization = org;
-        this.approvalStatus = org.approvalStatus;
+        this.approvalStatus =
+        this.organization?.isApproved === true ? 'approved' :
+        this.organization?.isApproved === false ? 'rejected' :
+        'pending';
+
         this.loadScopes();
         this.loadBugs();
         console.log('Loaded organization:', this.organization);

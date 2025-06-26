@@ -1,0 +1,13 @@
+form { max-width: 400px; 
+    margin: auto;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3%;
+ }
+
+ h2 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}

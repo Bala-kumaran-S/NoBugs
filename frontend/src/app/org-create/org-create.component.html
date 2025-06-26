@@ -1,29 +1,18 @@
-<div class="org-create-container">
-  <h2>Create Organization</h2>
-  <form [formGroup]="orgForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label>Name:</label>
-      <input formControlName="name" />
-      <div *ngIf="submitted && f.name.invalid" class="error">
-        Name is required (max 100 chars).
-      </div>
-    </div>
-    <div>
-      <label>Contact Email:</label>
-      <input formControlName="contactEmail" type="email" />
-      <div *ngIf="submitted && f.contactEmail.invalid" class="error">
-        Valid email is required (max 255 chars).
-      </div>
-    </div>
-    <div>
-      <label>Description:</label>
-      <textarea formControlName="description"></textarea>
-      <div *ngIf="submitted && f.description.invalid" class="error">
-        Max 500 characters.
-      </div>
-    </div>
-    <button type="submit">Register Organization</button>
-    <div *ngIf="error" class="error">{{ error }}</div>
-    <div *ngIf="success" class="success">{{ success }}</div>
-  </form>
-</div>
+<h2>Create Organization</h2>
+
+<form [formGroup]="orgForm" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label for="exampleInputEmail" class="form-label">Organization Name</label>
+    <input type="text" formControlName="name" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Contact Email</label>
+    <input type="email" formControlName="contactEmail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Description</label>
+    <input type="text" formControlName="description" class="form-control" id="exampleInputPassword1">
+  </div>
+  
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

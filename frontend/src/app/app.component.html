@@ -1,6 +1,65 @@
-<h1>Hello from Angular! and me and all of us. yes
-</h1>
-<br>
-<button (click)="logout()">Logout</button>
-    <router-outlet></router-outlet>
-    
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-gradient-animation" routerLink="/">NoBugs</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- Home Link - Always visible -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        </li>
+
+        <!-- Researcher Links -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard/research" routerLinkActive="active">Researcher Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/researcher/my-bugs" routerLinkActive="active">My Bug Reports</a>
+        </li>
+
+        <!-- Organization Admin Links -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarOrgDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Organizations
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarOrgDropdown">
+            <li><a class="dropdown-item" routerLink="/dashboard/org" routerLinkActive="active">Org Dashboard</a></li>
+            <li><a class="dropdown-item" routerLink="/dashboard/org/new" routerLinkActive="active">Create New Org</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarScopeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Scopes
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarScopeDropdown">
+            <li><a class="dropdown-item" routerLink="/dashboard/org/scopes" routerLinkActive="active">Manage Scopes</a></li>
+            <li><a class="dropdown-item" routerLink="/dashboard/org/scopes/add" routerLinkActive="active">Add New Scope</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/users" routerLinkActive="active">Users</a>
+        </li>
+      </ul>
+
+      <!-- Right-aligned Auth Links (always visible) -->
+       
+        <div class="btn-group">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Action
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">User Profile</a></li>
+          <li><a class="dropdown-item" href="#"></a></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li ngIf="hasToken"><a class="dropdown-item" href="#" (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

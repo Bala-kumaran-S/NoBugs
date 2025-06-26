@@ -1,5 +1,12 @@
 package com.NoBugs.backend.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 import com.NoBugs.backend.dto.BugReportDTO;
 import com.NoBugs.backend.entity.BugReport;
 import com.NoBugs.backend.entity.Scope;
@@ -7,13 +14,8 @@ import com.NoBugs.backend.entity.User;
 import com.NoBugs.backend.repository.BugReportRepository;
 import com.NoBugs.backend.repository.ScopeRepository;
 import com.NoBugs.backend.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +47,7 @@ public class BugReportService {
     // Get all bug reports submitted by the current researcher
     public List<BugReportDTO> getMyBugReports() {
         User reporter = getCurrentUser();
+        System.out.println("Current user: " + reporter);
         return bugReportRepo.findByReporter(reporter)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }

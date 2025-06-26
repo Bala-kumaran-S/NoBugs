@@ -1,7 +1,607 @@
-.dashboard-container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-.org-card { border: 1px solid #eee; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; background: #fafafa; }
-.error { color: #d32f2f; margin: 1rem 0; }
-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-th, td { border: 1px solid #ddd; padding: 0.5rem; }
-th { background: #f5f5f5; }
-button { margin-left: 0.5rem; }
+/* --- Global & Base Styles --- */
+body {
+    font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f0f2f5; /* A soft, modern background */
+    margin: 0;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+    color: #2c3e50;
+    text-align: center;
+    font-size: 2.8em;
+    margin-bottom: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+h2 {
+    color: #34495e;
+    font-size: 2em;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+h3 {
+    color: #3f51b5; /* A distinct blue for org names */
+    font-size: 1.6em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* --- Dashboard Container --- */
+.dashboard-container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    padding: 40px 50px;
+    width: 100%;
+    max-width: 1200px; /* Wider dashboard for more content */
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Space between sections */
+}
+
+/* --- Loading & Error Messages --- */
+.loading, .error {
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1.1em;
+}
+
+.loading {
+    background-color: #e0f2f7; /* Light blue */
+    color: #2196f3; /* Blue */
+}
+
+.error {
+    background-color: #ffe0e0; /* Light red */
+    color: #d32f2f; /* Red */
+    border: 1px solid #ef9a9a;
+}
+
+/* --- Section Styling --- */
+section {
+    padding: 25px 0;
+    border-bottom: 1px dashed #e0e0e0;
+}
+
+section:last-child {
+    border-bottom: none; /* No border for the last section */
+}
+
+/* --- Buttons --- */
+button {
+    background-color: #007bff; /* Primary action blue */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Secondary button style (e.g., View Scopes) */
+button.secondary {
+    background-color: #6c757d; /* Grey */
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.2);
+}
+
+button.secondary:hover {
+    background-color: #5a6268;
+    box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
+}
+
+
+/* --- Public Organizations Section --- */
+.org-card {
+    background-color: #fdfdfd;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.org-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.org-card p {
+    color: #555;
+    margin-bottom: 15px;
+    font-size: 1.05em;
+}
+
+.org-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Grid for scopes */
+    gap: 15px;
+}
+
+.org-card ul li {
+    background-color: #f0f4f7;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.95em;
+    position: relative;
+    overflow: hidden;
+}
+
+.org-card ul li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background-color: #4CAF50; /* Green accent bar */
+}
+
+.org-card ul li strong {
+    color: #4CAF50;
+    font-size: 1.1em;
+}
+
+.org-card ul li button {
+    margin-top: 10px;
+    align-self: flex-start; /* Align buttons to the start within the flex column */
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border-radius: 6px;
+}
+
+.org-card ul li button:first-of-type {
+    margin-right: 10px; /* Space between buttons */
+    background-color: #4CAF50; /* Different color for 'View Scopes' */
+    box-shadow: 0 3px 6px rgba(76, 175, 80, 0.2);
+}
+
+.org-card ul li button:first-of-type:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+
+/* --- My Bug Reports Section (Transformed Table) --- */
+/* Hide the original table headers as we're making cards */
+table thead {
+    display: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Each table row becomes a card */
+table tbody tr {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
+    background-color: #fdfdfd;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px; /* Space between cards */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    align-items: center; /* Align items vertically */
+    position: relative;
+    overflow: hidden;
+}
+
+table tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Left accent bar for bug report cards */
+table tbody tr::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background-color: #3f51b5; /* Primary accent color */
+}
+
+
+/* Style table cells as labels and values */
+table tbody td {
+    flex: 1 1 auto; /* Allow items to grow and shrink, filling space */
+    min-width: 150px; /* Minimum width for each info piece */
+    padding: 5px 10px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+/* Specific styling for the 'Title' cell to make it prominent */
+table tbody td:nth-child(1) { /* Title */
+    flex-basis: 100%; /* Take full width */
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    border-bottom: 1px dotted #ececec;
+    padding-bottom: 10px;
+    padding-left: 0; /* Remove extra padding due to ::before */
+}
+
+/* Make actions appear at the end and take less width */
+table tbody td:last-child {
+    flex: 0 0 auto; /* Don't grow or shrink, take only necessary width */
+    margin-left: auto; /* Push to the right */
+    padding-right: 0;
+    display: flex; /* For button alignment */
+    align-items: center;
+}
+
+table tbody td button {
+    padding: 8px 18px;
+    font-size: 0.9em;
+    border-radius: 6px;
+}
+
+/* Labels for table cells (pseudo-elements) */
+table tbody td::before {
+    content: attr(data-label); /* Use a data attribute for the label */
+    font-weight: 600;
+    color: #777;
+    display: block; /* Make label appear on its own line */
+    margin-bottom: 2px;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Hide labels for title and actions as they are self-explanatory */
+table tbody td:nth-child(1)::before,
+table tbody td:last-child::before {
+    content: none;
+}
+
+/* Status & Severity Badges for Bug Reports */
+td span {
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 0.9em;
+}
+
+td span:contains("SUBMITTED") {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+td span:contains("ACCEPTED") {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+td span:contains("REJECTED") {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+td span:contains("CRITICAL") {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+td span:contains("HIGH") {
+    background-color: #fd7e14;
+    color: #fff;
+}
+
+td span:contains("MEDIUM") {
+    background-color: #ffc107;
+    color: #333;
+}
+
+td span:contains("LOW") {
+    background-color: #28a745;
+    color: #fff;
+}
+
+td span:contains("Unassigned") {
+    background-color: #e0e0e0;
+    color: #666;
+}
+
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .dashboard-container {
+        padding: 30px 30px;
+        margin: 20px auto;
+    }
+
+    h1 {
+        font-size: 2.2em;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 1.7em;
+    }
+
+    .org-card ul {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    table tbody tr {
+        flex-direction: column; /* Stack details vertically on smaller screens */
+        align-items: flex-start;
+        padding-left: 25px; /* Adjust for accent bar */
+    }
+
+    table tbody td {
+        min-width: unset; /* Remove min-width to allow full flexibility */
+        width: 100%; /* Each cell takes full width */
+        padding: 5px 0;
+    }
+
+    table tbody td:last-child {
+        margin-left: 0; /* Remove auto-margin */
+        width: 100%;
+        justify-content: flex-start; /* Align button to start */
+        margin-top: 15px; /* Space above action button */
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 20px;
+        margin: 15px auto;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    .org-card {
+        padding: 20px;
+    }
+
+    .org-card ul {
+        grid-template-columns: 1fr; /* Single column for scopes on mobile */
+    }
+
+    .org-card ul li {
+        padding: 12px;
+    }
+
+    button {
+        padding: 10px 18px;
+        font-size: 0.95em;
+        width: 100%; /* Make buttons full width */
+    }
+
+    .org-card ul li button:first-of-type {
+        margin-right: 0; /* No margin on smaller screens */
+        margin-bottom: 10px; /* Space between stacked buttons */
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .dashboard-container {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+}
+
+.tab-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.tab-toggle button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: #e5e7eb;
+  color: #1f2937;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tab-toggle button.active {
+  background-color: #2563eb;
+  color: white;
+}
+
+.tab-toggle button:hover:not(.active) {
+  background-color: #d1d5db;
+}
+
+/* --- Custom CSS for Status & Severity Badges (complementing Bootstrap) --- */
+/* These will override Bootstrap's default badge colors based on your ngClass */
+.badge {
+    font-weight: 600; /* Ensure font-weight from previous style */
+    padding: 0.4em 0.8em; /* Adjust padding for visual consistency with Bootstrap */
+}
+
+.status-submitted {
+    background-color: #ffc107 !important; /* Yellow */
+    color: #333 !important;
+}
+.status-accepted {
+    background-color: #28a745 !important; /* Green */
+    color: #fff !important;
+}
+.status-rejected {
+    background-color: #dc3545 !important; /* Red */
+    color: #fff !important;
+}
+
+.severity-critical {
+    background-color: #dc3545 !important; /* Red */
+    color: #fff !important;
+    animation: pulseGlow 2s infinite cubic-bezier(0.66, 0, 0.34, 1); /* Apply pulse animation */
+    position: relative; /* Needed for box-shadow glow */
+}
+.severity-high {
+    background-color: #fd7e14 !important; /* Orange */
+    color: #fff !important;
+    animation: subtlePulse 1.5s infinite ease-in-out; /* Apply subtle pulse */
+}
+.severity-medium {
+    background-color: #ffc107 !important; /* Yellow */
+    color: #333 !important;
+}
+.severity-low {
+    background-color: #28a745 !important; /* Green */
+    color: #fff !important;
+}
+.severity-unassigned {
+    background-color: #6c757d !important; /* Grey */
+    color: #fff !important;
+}
+
+/* Animations (from previous suggestions) */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+        transform: scale(1);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+        transform: scale(1.05);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+        transform: scale(1);
+    }
+}
+
+@keyframes subtlePulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.02); opacity: 0.95; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- Custom Card Hover Effect --- */
+.animated-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.animated-card:hover {
+    transform: translateY(-8px); /* Lifts the card */
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important; /* Stronger shadow on hover */
+}
+
+/* Truncate long titles in card header */
+.card-header .text-truncate {
+    max-width: calc(100% - 70px); /* Adjust based on badge width */
+}
+
+/* Adjust font size for card title if needed */
+.card-title {
+    font-size: 1.25rem; /* Or whatever size fits your design */
+    font-weight: 600;
+}
+
+/* Override list group item padding if needed for tighter spacing */
+.list-group-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+}
+
+/* --- IMPORTANT: HTML Modification Recommendation for "My Bug Reports" --- */
+/*
+To achieve the best possible "not in table" look, you should ideally modify your HTML for
+"My Bug Reports" section from `<table>` to a `div`-based structure.
+This CSS makes the `<table>` behave like cards, but it's often more semantic and flexible
+to use `div`s directly if you're not displaying tabular data.
+
+Example of recommended HTML change for 'My Bug Reports':
+
+<section>
+    <h2>My Bug Reports</h2>
+    <div *ngIf="loadingBugs">Loading bug reports...</div>
+    <div *ngIf="errorBugs" class="error">{{ errorBugs }}</div>
+    <div *ngIf="!loadingBugs && bugReports.length === 0">You have not submitted any bug reports yet.</div>
+    <div *ngIf="!loadingBugs && bugReports.length > 0" class="bug-reports-grid">
+        <div *ngFor="let bug of bugReports" class="bug-report-card-item">
+            <h4 class="bug-title">{{ bug.title }}</h4>
+            <div class="bug-info-grid">
+                <p><strong>Scope:</strong> {{ bug.scopeTitle }}</p>
+                <p><strong>Organization:</strong> {{ bug.organizationName }}</p>
+                <p><strong>Status:</strong> <span [ngClass]="'status-' + bug.status.toLowerCase()">{{ bug.status }}</span></p>
+                <p><strong>Severity:</strong> <span [ngClass]="'severity-' + (bug.severity ? bug.severity.toLowerCase() : 'unassigned')">{{ bug.severity || 'Unassigned' }}</span></p>
+                <p><strong>Submitted:</strong> {{ bug.submittedAt }}</p>
+            </div>
+            <div class="bug-actions">
+                <button (click)="viewBug(bug)">View Details</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+If you were to change to the above HTML, the CSS for `.bug-reports-grid` and `.bug-report-card-item`
+would be cleaner and more direct than forcing table elements. The status/severity badge styles
+could be directly applied to the spans.
+*/

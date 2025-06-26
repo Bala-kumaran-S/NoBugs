@@ -18,6 +18,8 @@ export class ResearcherDashboardComponent implements OnInit {
   loadingBugs = true;
   errorOrgs = '';
   errorBugs = '';
+  selectedTab: 'orgs' | 'bugs' = 'orgs'; // default to orgs tab
+
 
   constructor(
     private dashboardService: ResearchDashService,

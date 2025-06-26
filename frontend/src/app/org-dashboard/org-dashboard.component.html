@@ -18,7 +18,7 @@
       <li *ngFor="let scope of scopes">
         <strong>{{ scope.title }}</strong> - {{ scope.targetUrl }}
         <span class="scope-actions">
-          <button [routerLink]="['/org/scopes', scope.id, 'edit']">Edit</button>
+          <button [routerLink]="['scopes/', scope.id, 'edit']">Edit</button>
         </span>
       </li>
     </ul>

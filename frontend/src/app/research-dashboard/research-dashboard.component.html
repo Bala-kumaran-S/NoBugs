@@ -1,7 +1,14 @@
 <div class="dashboard-container">
   <h1>Researcher Dashboard</h1>
 
-  <section>
+  <!-- Tab Switcher -->
+  <div class="tab-toggle">
+    <button [class.active]="selectedTab === 'orgs'" (click)="selectedTab = 'orgs'">🛡️ Public Organizations</button>
+    <button [class.active]="selectedTab === 'bugs'" (click)="selectedTab = 'bugs'">🐞 My Bug Reports</button>
+  </div>
+
+  <!-- Public Organizations Section -->
+  <section *ngIf="selectedTab === 'orgs'">
     <h2>Public Organizations & Scopes</h2>
     <div *ngIf="loadingOrgs">Loading organizations...</div>
     <div *ngIf="errorOrgs" class="error">{{ errorOrgs }}</div>
@@ -21,38 +28,52 @@
     </div>
   </section>
 
-  <section>
-    <h2>My Bug Reports</h2>
-    <div *ngIf="loadingBugs">Loading bug reports...</div>
-    <div *ngIf="errorBugs" class="error">{{ errorBugs }}</div>
-    <div *ngIf="!loadingBugs && bugReports.length === 0">You have not submitted any bug reports yet.</div>
-    <table *ngIf="!loadingBugs && bugReports.length > 0">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Scope</th>
-          <th>Organization</th>
-          <th>Status</th>
-          <th>Severity</th>
-          <th>Submitted</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let bug of bugReports">
-          <td>{{ bug.title }}</td>
-          <td>{{ bug.scopeTitle }}</td>
-          <td>{{ bug.organizationName }}</td>
-          <td>{{ bug.status }}</td>
-          <td>{{ bug.severity || 'Unassigned' }}</td>
-          <td>{{ bug.submittedAt }}</td>
-          <td>
-            <button (click)="viewBug(bug)">View</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <!-- My Bug Reports Section -->
+  <section *ngIf="selectedTab === 'bugs'">
+  <h2>My Bug Reports</h2>
 
+  <div *ngIf="loadingBugs" class="alert alert-info text-center" role="alert">
+    Loading bug reports...
+  </div>
+  <div *ngIf="errorBugs" class="alert alert-danger" role="alert">
+    {{ errorBugs }}
+  </div>
+  <div *ngIf="!loadingBugs && bugReports.length === 0" class="alert alert-secondary text-center" role="alert">
+    You haven't submitted any bug reports yet.
+  </div>
 
+  <div *ngIf="!loadingBugs && bugReports.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div *ngFor="let bug of bugReports" class="col">
+      <div class="card h-100 shadow-sm border-0 animated-card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 text-truncate">{{ bug.title }}</h5>
+          <span [ngClass]="'status-' + bug.status.toLowerCase()" class="badge rounded-pill ms-2">{{ bug.status }}</span>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <strong>Scope:</strong> {{ bug.scopeTitle }}
+            </li>
+            <li class="list-group-item">
+              <strong>Organization:</strong> {{ bug.organizationName }}
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <strong>Severity:</strong>
+              <span [ngClass]="'severity-' + (bug.severity ? bug.severity.toLowerCase() : 'unassigned')"
+                    class="badge rounded-pill ms-auto">{{ bug.severity || 'Unassigned' }}</span>
+            </li>
+            <li class="list-group-item">
+              <strong>Submitted:</strong> {{ bug.submittedAt | date:'short' }}
+            </li>
+          </ul>
+        </div>
+        <div class="card-footer bg-light border-0 d-flex justify-content-end">
+          <button (click)="viewBug(bug)" class="btn btn-outline-primary btn-sm">
+            View Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 </div>

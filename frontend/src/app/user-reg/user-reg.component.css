@@ -1,0 +1,21 @@
+form { max-width: 400px; 
+    margin: auto;
+    margin-top: 10%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 3%;
+ }
+
+ button { margin-top: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ }
+
+ select {
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+ }

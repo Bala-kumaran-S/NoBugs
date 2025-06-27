@@ -6,10 +6,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { filter } from 'rxjs/operators';
+ import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, UserRegComponent, ReactiveFormsModule, RouterModule],
+  imports: [RouterOutlet, UserRegComponent, ReactiveFormsModule, RouterModule, NgIf],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit {
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.setAuthFlags();
-      console.log('Route changed, updated auth flags:', this.hasToken);
+      // console.log('Route changed, updated auth flags:', this.hasToken);
     });
   }
 
@@ -42,8 +43,9 @@ export class AppComponent implements OnInit {
   }
 
   setAuthFlags() {
-    console.log('Setting auth flags based on localStorage token', localStorage.getItem('token'));
+    // console.log('Setting auth flags based on localStorage token', localStorage.getItem('token'));
     this.hasToken = !!localStorage.getItem('token');
+    console.log('hasToken:', this.hasToken);
   }
 
   logout() {

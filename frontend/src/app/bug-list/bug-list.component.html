@@ -1,26 +1,62 @@
-<p>bug-list works!</p>
-<div *ngIf="loading">Loading bug reports...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
-<table *ngIf="!loading && bugs.length > 0">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Scope</th>
-      <th>Organization</th>
-      <th>Status</th>
-      <th>Severity</th>
-      <th>Submitted</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let bug of bugs">
-      <td>{{ bug.title }}</td>
-      <td>{{ bug.scopeTitle }}</td>
-      <td>{{ bug.organizationName }}</td>
-      <td>{{ bug.status }}</td>
-      <td>{{ bug.reporterSeverity }}</td>
-      <td>{{ bug.submittedAt }}</td>
-    </tr>
-  </tbody>
-</table>
-<div *ngIf="!loading && bugs.length === 0">No bug reports submitted yet.</div>
+
+
+<div *ngIf="loadingBugs" class="alert alert-info text-center" role="alert">
+  Loading bug reports...
+</div>
+<div *ngIf="errorBugs" class="alert alert-danger" role="alert">
+  {{ errorBugs }}
+</div>
+  <div *ngIf="!loadingBugs && bugReports?.length === 0" class="alert alert-secondary text-center" role="alert">
+  You haven't submitted any bug reports yet.
+</div>
+
+<div *ngIf="!loadingBugs" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 total">
+  <div *ngFor="let bug of bugReports" class="col">
+    <div class="card h-100 shadow bug-card">
+      <div class="card-header d-flex justify-content-between align-items-center bug-card-header">
+        <div>
+          <span class="badge rounded-pill me-2"
+                [ngClass]="{
+                  'bg-success': bug?.status === 'RESOLVED',
+                  'bg-warning text-dark': bug?.status === 'IN_PROGRESS',
+                  'bg-danger': bug?.status === 'REJECTED',
+                  'bg-secondary': bug?.status !== 'RESOLVED' && bug?.status !== 'IN_PROGRESS' && bug?.status !== 'REJECTED'
+                }">
+            {{ bug?.status | titlecase }}
+          </span>
+          <span class="bug-title">{{ bug?.title }}</span>
+        </div>
+        <span class="badge severity-badge"
+              [ngClass]="{
+                'bg-danger': bug?.severity === 'CRITICAL',
+                'bg-warning text-dark': bug?.severity === 'HIGH',
+                'bg-info text-dark': bug?.severity === 'MEDIUM',
+                'bg-secondary': !bug?.severity || bug?.severity === 'LOW'
+              }">
+          {{ bug?.severity || 'Unassigned' }}
+        </span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>Scope:</strong> {{ bug?.scopeTitle }}
+          </li>
+          <li class="list-group-item">
+            <strong>Organization:</strong> {{ bug?.organizationName }}
+          </li>
+          <li class="list-group-item">
+            <strong>Submitted:</strong>
+            <span class="text-muted">{{ bug?.submittedAt | date:'medium' }}</span>
+          </li>
+        </ul>
+        
+      </div>
+      <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+        <span class="text-muted small">ID: {{ bug?.id }}</span>
+        <button (click)="viewBug(bug)" class="btn btn-gradient-bug btn-sm">
+          <i class="bi bi-eye"></i> View Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,23 +3,45 @@ import { ResearchDashService, OrganizationSummary, BugReport } from '../services
 import { Router } from '@angular/router';
 import { ScopeService, ScopeDTO } from '../services/scope.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 
 @Component({
   selector: 'app-researcher-dashboard',
   templateUrl: './research-dashboard.component.html',
   styleUrls: ['./research-dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, FormsModule],
+  animations: [
+    trigger('listAnimation', [
+      transition('* <=> *', [
+        query(
+          ':enter',
+          [
+            style({ opacity: 0, transform: 'translateY(20px)' }),
+            stagger('60ms', [
+              animate(
+                '400ms cubic-bezier(0.35, 0, 0.25, 1)',
+                style({ opacity: 1, transform: 'none' })
+              )
+            ])
+          ],
+          { optional: true }
+        )
+      ])
+    ])
+  ]
 })
-export class ResearcherDashboardComponent implements OnInit {
-  organizations: (OrganizationSummary & { scopes: ScopeDTO[] })[] = [];
+export class ResearchDashboardComponent implements OnInit {
   bugReports: BugReport[] = [];
   loadingOrgs = true;
   loadingBugs = true;
   errorOrgs = '';
   errorBugs = '';
   selectedTab: 'orgs' | 'bugs' = 'orgs'; // default to orgs tab
-
+  searchTerm: string = '';
+  filteredOrganizations: OrganizationSummary[] = [];
+  organizations: OrganizationSummary[] = []; // Make sure this is set when you load orgs
 
   constructor(
     private dashboardService: ResearchDashService,
@@ -30,9 +52,8 @@ export class ResearcherDashboardComponent implements OnInit {
   ngOnInit() {
     this.dashboardService.getPublicOrganizations().subscribe({
       next: orgs => {
-        // For each organization, fetch its public scopes
-        const enrichedOrgs = orgs.map(org => ({ ...org, scopes: [] as ScopeDTO[] }));
-        this.organizations = enrichedOrgs;
+        this.organizations = orgs;
+        this.filteredOrganizations = orgs; // Show all by default
         this.loadingOrgs = false;
 
         this.organizations.forEach(org => {
@@ -71,6 +92,19 @@ export class ResearcherDashboardComponent implements OnInit {
         this.loadingBugs = false;
       }
     });
+  }
+
+  onSearchChange() {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (term === '') {
+      // If search box is empty, show all orgs
+      this.filteredOrganizations = this.organizations;
+    } else {
+      // Otherwise, filter by name
+      this.filteredOrganizations = this.organizations.filter(org =>
+        org.name.toLowerCase().includes(term)
+      );
+    }
   }
 
   viewScopes(org: OrganizationSummary) {

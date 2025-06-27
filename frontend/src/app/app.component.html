@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold text-gradient-animation" routerLink="/">NoBugs</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,21 +43,35 @@
         </li>
       </ul>
 
-      <!-- Right-aligned Auth Links (always visible) -->
-       
-        <div class="btn-group">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          Action
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">User Profile</a></li>
-          <li><a class="dropdown-item" href="#"></a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li ngIf="hasToken"><a class="dropdown-item" href="#" (click)="logout()">Logout</a></li>
-        </ul>
-      </div>
-      
+      <!-- Account Dropdown -->
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center account-link" href="#" id="navbarAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="me-2"><i class="bi bi-person-circle"></i></span> Account
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark account-dropdown" aria-labelledby="navbarAccountDropdown">
+            <li *ngIf="!hasToken">
+              <a class="dropdown-item" routerLink="/login" routerLinkActive="active">Login</a>
+            </li>
+            <li *ngIf="!hasToken">
+              <a class="dropdown-item" routerLink="/register" routerLinkActive="active">Register</a>
+            </li>
+            <li *ngIf="hasToken">
+              <a class="dropdown-item" routerLink="/user-profile" routerLinkActive="active">User Profile</a>
+            </li>
+            <li *ngIf="hasToken">
+              <a class="dropdown-item" routerLink="/settings" routerLinkActive="active">Settings</a>
+            </li>
+            <li *ngIf="hasToken">
+              <a class="dropdown-item" routerLink="/contact" routerLinkActive="active">Contact Us</a>
+            </li>
+            <li *ngIf="hasToken"><hr class="dropdown-divider"></li>
+            <li *ngIf="hasToken">
+              <a class="dropdown-item text-danger" href="#" (click)="logout()">Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

@@ -32,6 +32,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).map(this::mapToDTO);
     }
 
+    public Optional<UserDTO> getUserByEmail(String email) {
+        return userRepository.findByEmail(email).map(this::mapToDTO);
+    }
+
     public UserDTO createUser(User user) {
         
         User saved = userRepository.save(user);

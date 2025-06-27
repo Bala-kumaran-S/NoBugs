@@ -1,0 +1,81 @@
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #533b52, #4b5b7e);
+  min-height: 90vh;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-top: 1rem;
+  color: #e5e7eb;
+}
+
+.hero .btn {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+}
+
+/* Features Section */
+.features .card {
+  transition: transform 0.3s ease;
+}
+
+.features .card:hover {
+  transform: translateY(-5px);
+}
+
+.features .card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* CTA Section */
+.cta-section {
+  background: #0f172a;
+}
+
+.cta-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.cta-section p {
+  font-size: 1.1rem;
+  color: #cbd5e1;
+}
+
+.cta-section .btn-success {
+  font-size: 1.1rem;
+  padding: 0.75rem 2rem;
+}
+
+/* Footer */
+.footer {
+  background-color: #f8f9fa;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .cta-section h2 {
+    font-size: 1.5rem;
+  }
+}
+
+

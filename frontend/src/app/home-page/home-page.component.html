@@ -1,0 +1,60 @@
+<!-- home.component.html -->
+ 
+<section class="hero text-center text-white d-flex flex-column justify-content-center align-items-center">
+  <div class="container py-5">
+    <h1 class="display-4 fw-bold">Welcome to NoBugs</h1>
+    <p class="lead">Where security researchers and organizations collaborate to find and fix bugs — securely and ethically.</p>
+    <div class="mt-4">
+      <a href="/register" class="btn btn-primary btn-lg me-3">Get Started</a>
+      <a href="/login" class="btn btn-outline-light btn-lg">Login</a>
+    </div>
+  </div>
+</section>
+
+<section class="features py-5 bg-light text-dark">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">For Researchers</h5>
+            <p class="card-text">Submit bugs, earn reputation, and get rewarded by top organizations.</p>
+            <a href="/dashboard/research" class="btn btn-outline-primary">Explore Dashboard</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">For Organizations</h5>
+            <p class="card-text">Manage scopes, triage reports, and build secure systems with the community.</p>
+            <a href="/dashboard/org" class="btn btn-outline-primary">View Program</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Transparency & Trust</h5>
+            <p class="card-text">We build a transparent ecosystem of ethical hacking and responsible disclosure.</p>
+            <a href="/about" class="btn btn-outline-primary">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section bg-dark text-white py-5 text-center">
+  <div class="container">
+    <h2 class="mb-4">Ready to Join the Bug Bounty Revolution?</h2>
+    <p class="mb-4">NoBugs is empowering researchers and organizations to collaborate on the future of cybersecurity.</p>
+    <a href="/register" class="btn btn-lg btn-success">Join Now</a>
+  </div>
+</section>
+
+<footer class="footer bg-light text-center py-3">
+  <div class="container">
+    <small class="text-muted">&copy; {{ currentYear }} NoBugs. All rights reserved.</small>
+  </div>
+</footer>

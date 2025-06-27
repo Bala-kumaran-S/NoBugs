@@ -42,6 +42,14 @@ public class UserController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    // email
+    @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+    
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));

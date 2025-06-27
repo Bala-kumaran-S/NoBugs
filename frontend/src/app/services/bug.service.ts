@@ -22,7 +22,7 @@ export interface BugReportDTO {
 }
 
 @Injectable({ providedIn: 'root' })
-export class BugReportService {
+export class BugService {
   private apiUrl = 'http://localhost:8080/api/researcher/bugs';
 
   constructor(private http: HttpClient) {}

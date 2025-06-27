@@ -1,0 +1,30 @@
+<div class="profile-container">
+  <div class="profile-card shadow-lg">
+    <div class="profile-header">
+      <img [src]="user?.profileImage || defaultProfileImage" alt="Profile" class="profile-img" />
+      <div>
+        <h2 class="profile-username">{{ user?.username }}</h2>
+        <span class="profile-role badge" [ngClass]="{
+          'bg-primary': user?.role === 'RESEARCHER',
+          'bg-success': user?.role === 'ORGANIZATION',
+          'bg-secondary': user?.role !== 'RESEARCHER' && user?.role !== 'ORGANIZATION'
+        }">{{ user?.role }}</span>
+      </div>
+    </div>
+    <div class="profile-details">
+      <div class="detail-row">
+        <span class="detail-label"><i class="bi bi-envelope"></i> Email:</span>
+        <span class="detail-value">{{ user?.email }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label"><i class="bi bi-star-fill text-warning"></i> Reputation:</span>
+        <span class="detail-value reputation">{{ user?.reputationPoints }}</span>
+      </div>
+      
+    </div>
+    <div class="profile-actions">
+      <button class="btn btn-outline-primary me-2"><i class="bi bi-pencil"></i> Edit Profile</button>
+      <button class="btn btn-outline-danger" onclick="logout()"><i class="bi bi-box-arrow-right" ></i> Logout</button>
+    </div>
+  </div>
+</div>

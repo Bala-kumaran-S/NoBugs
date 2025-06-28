@@ -1,6 +1,4 @@
-# 🐞 NoBugs – Bug Bounty Platform for Educational Use
-
-![NoBugs Banner](https://your-banner-url.com) <!-- Replace with your own banner if available -->
+# NoBugs – Bug Bounty Platform for Educational Use
 
 ## 🚀 Overview
 
@@ -64,7 +62,7 @@ Ideal for colleges, cybersecurity clubs, and training programs, it enables respo
 - Angular CLI
 - MySQL
 
-### ⚙️ Backend Setup
+### Backend Setup
 
 ```bash
 cd backend
@@ -72,6 +70,24 @@ cd backend
 # Configure DB credentials in `application.properties`
 ./mvnw spring-boot:run
 ```
+### Frontend setup
+
+```bash
+cd frontend
+npm install
+ng serve --open
+```
+### App Architecture
+
+[ Angular Frontend ]
+         ⬇️
+[ Spring Boot API ]
+         ⬇️
+[ MySQL Database ]
+
+
+### Screen Shots
+
 ![image](https://github.com/user-attachments/assets/53fc2a1d-dc3a-4fa5-a5a2-5015cd074e70)
 ![image](https://github.com/user-attachments/assets/b68685cf-3c72-4e17-93b6-2ba6320c1e8d)
 ![image](https://github.com/user-attachments/assets/0dd546b5-7afc-411b-affa-47de8ed5a88a)

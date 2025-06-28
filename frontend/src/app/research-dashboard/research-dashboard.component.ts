@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ScopeService, ScopeDTO } from '../services/scope.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router'; // <-- Add this import
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 
 @Component({
@@ -11,7 +12,7 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
   templateUrl: './research-dashboard.component.html',
   styleUrls: ['./research-dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule], // <-- Add RouterModule here
   animations: [
     trigger('listAnimation', [
       transition('* <=> *', [

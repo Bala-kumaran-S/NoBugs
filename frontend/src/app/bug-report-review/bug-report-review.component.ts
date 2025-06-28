@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BugReportService, BugReportDTO } from '../services/bug.service';
+import { BugService, BugReportDTO } from '../services/bug.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -25,7 +25,7 @@ export class BugReportReviewComponent implements OnInit {
   reputationPoints?: number; // Add this line
 
   constructor(
-    private bugService: BugReportService,
+    private bugService: BugService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private http: HttpClient // Inject HttpClient

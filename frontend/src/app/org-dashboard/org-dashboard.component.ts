@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrganizationService } from '../services/organization.service';
-import { BugReportService } from '../services/bug.service';
+import { BugService } from '../services/bug.service';
 import { ScopeService } from '../services/scope.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -23,7 +23,7 @@ export class OrgDashboardComponent implements OnInit {
 
   constructor(
     private orgService: OrganizationService,
-    private bugService: BugReportService,
+    private bugService: BugService,
     private scopeService: ScopeService
   ) {}
 

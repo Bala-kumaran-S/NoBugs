@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { BugReportService, BugReportDTO } from '../services/bug.service';
+import { BugService, BugReportDTO } from '../services/bug.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -19,7 +19,7 @@ export class SubmitBugComponent {
 
   constructor(
     private fb: FormBuilder,
-    private bugService: BugReportService,
+    private bugService: BugService,
     private route: ActivatedRoute,
     private router: Router
   ) {

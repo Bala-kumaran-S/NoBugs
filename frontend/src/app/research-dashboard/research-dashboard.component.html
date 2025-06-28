@@ -26,7 +26,7 @@
             <strong>{{ scope.title }}</strong> ({{ scope.type }}) - {{ scope.targetUrl }}
             <div class="scopeButtons">
             <button (click)="viewScopes(org)">View Scope Details</button>
-            <button href="/researcher/bug-report">Report Bug</button>
+            <button [routerLink]="['/   researcher/bug-report', scope.id]">Report Bug</button>
             </div>
           </li>
         </ul>

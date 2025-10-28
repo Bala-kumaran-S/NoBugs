@@ -1,39 +1,39 @@
 # NoBugs – Bug Bounty Platform for Educational Use
 
-## 🚀 Overview
+## Overview
 
 **NoBugs** is a modern educational bug bounty platform that simulates real-world vulnerability disclosure workflows between security researchers and organizations.  
 Ideal for colleges, cybersecurity clubs, and training programs, it enables responsible disclosure in a secure and structured way.
 
-> 🛡️ Learn security. Build credibility. Report ethically.
+> Learn security. Build credibility. Report ethically.
 
 ---
 
-## 🎯 Features
+## Features
 
-### 👥 Authentication & Roles
+### Authentication & Roles
 - JWT-based login with Spring Security
 - Role-based access (`ADMIN`, `ORGANIZATION`, `RESEARCHER`)
 - Secure registration and login flow
 
-### 🧑‍💻 Researcher Dashboard
+### Researcher Dashboard
 - Browse public programs and scopes
 - Submit detailed bug reports
 - Track report status (Pending, Accepted, Rejected)
 
-### 🏢 Organization Dashboard
+### Organization Dashboard
 - Create/manage bounty programs
 - Define scope (title, domain, exclusions)
 - Review incoming bug reports and respond
 
-### 📊 Admin Panel
+### Admin Panel
 - View and manage all users and programs
 - Moderate platform activity
 - Toggle public/private access of organizations
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Backend
 - Java 17
@@ -54,9 +54,9 @@ Ideal for colleges, cybersecurity clubs, and training programs, it enables respo
 
 ---
 
-## 🧪 Local Setup Instructions
+## Local Setup Instructions
 
-### ✅ Prerequisites
+### Prerequisites
 - Java 17+
 - Node.js 18+
 - Angular CLI
@@ -80,9 +80,9 @@ ng serve --open
 ### App Architecture
 
 [ Angular Frontend ]
-         ⬇️
+         ->
 [ Spring Boot API ]
-         ⬇️
+         ->
 [ MySQL Database ]
 
 

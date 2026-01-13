@@ -3,13 +3,15 @@ import { Component, OnInit } from '@angular/core';
 import { UserDTO } from '../services/user.service';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
+
 })
 export class UserProfileComponent implements OnInit {
 
@@ -17,7 +19,7 @@ export class UserProfileComponent implements OnInit {
 
   defaultProfileImage = 'https://ui-avatars.com/api/?name=User&background=00c6ff&color=fff&size=128';
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private http: HttpClient) { }
   
   ngOnInit() {
     const token = localStorage.getItem('token');
@@ -44,11 +46,14 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
+    logout() {
+      this.http.post('/api/auth/logout', {}).subscribe({
+        complete: () => {
+          localStorage.removeItem('token');
+          this.user = null;
+          this.router.navigate(['/login']);
+        }
+      });
+    }
 
-  logout() {
-    localStorage.removeItem('token');
-    this.user = null; // Clear user data on logout
-    console.log('User logged out successfully');
-    this.router.navigate(['/login']);
-  }
 }

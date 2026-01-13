@@ -4,7 +4,7 @@
   <div class="mb-3">
     <label for="title" class="form-label">Title</label>
     <input type="text" class="form-control" id="title" formControlName="title" />
-    <div *ngIf="submitted && f.title.invalid" class="text-danger">
+    <div *ngIf="submitted && f['title'].invalid" class="text-danger">
       Title is required (max 255 chars).
     </div>
   </div>
@@ -12,7 +12,7 @@
   <div class="mb-3">
     <label for="targetUrl" class="form-label">Target URL</label>
     <input type="text" class="form-control" id="targetUrl" formControlName="targetUrl" />
-    <div *ngIf="submitted && f.targetUrl.invalid" class="text-danger">
+    <div *ngIf="submitted && f['targetUrl'].invalid" class="text-danger">
       Target URL is required (max 2048 chars).
     </div>
   </div>

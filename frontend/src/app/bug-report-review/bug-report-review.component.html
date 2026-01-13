@@ -9,7 +9,7 @@
     <p><strong>Organization:</strong> {{ bug?.organizationName }}</p>
     <p><strong>Affected Endpoint:</strong> {{ bug?.affectedEndpoint || '-' }}</p>
     <p><strong>Steps to Reproduce:</strong> {{ bug?.stepsToReproduce }}</p>
-    <p *ngIf="bug.attachmentUrl1"><strong>Attachment:</strong> <a [href]="bug?.attachmentUrl1" target="_blank">View</a></p>
+    <p *ngIf="bug?.attachmentUrl1"><strong>Attachment:</strong> <a [href]="bug?.attachmentUrl1" target="_blank">View</a></p>
     <p><strong>Submitted At:</strong> {{ bug?.submittedAt }}</p>
     <p><strong>Status:</strong> {{ bug?.status }}</p>
     <p><strong>Admin Severity:</strong> {{ bug?.adminSeverity || '-' }}</p>

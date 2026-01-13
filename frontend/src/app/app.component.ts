@@ -1,19 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, NavigationEnd, RouterModule, RouterOutlet } from '@angular/router';
 import { UserRegComponent } from './user-reg/user-reg.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
 import { filter } from 'rxjs/operators';
- import { NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, UserRegComponent, ReactiveFormsModule, RouterModule, NgIf],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    UserRegComponent,
+    ReactiveFormsModule,
+    RouterModule,
+    NgIf,
+    HttpClientModule
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  standalone: true,
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
@@ -23,18 +29,18 @@ import { filter } from 'rxjs/operators';
   ]
 })
 export class AppComponent implements OnInit {
-  title = 'frontend';
 
-  // This property is used in the template for dropdown logic
+  title = 'frontend';
   hasToken = false;
 
-  constructor(private router: Router) {
-    // Update hasToken on every route change
+  constructor(
+    private router: Router,
+    private http: HttpClient   // ✅ inject HttpClient
+  ) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.setAuthFlags();
-      // console.log('Route changed, updated auth flags:', this.hasToken);
     });
   }
 
@@ -43,14 +49,21 @@ export class AppComponent implements OnInit {
   }
 
   setAuthFlags() {
-    // console.log('Setting auth flags based on localStorage token', localStorage.getItem('token'));
     this.hasToken = !!localStorage.getItem('token');
     console.log('hasToken:', this.hasToken);
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.setAuthFlags();
-    this.router.navigate(['/login']);
-  }
+  console.log("Calling backend logout...");
+
+  this.http.post('/api/auth/logout', {}).subscribe({
+    next: () => console.log("Backend logout OK"),
+    error: (e) => console.log("Backend logout ERROR", e),
+    complete: () => {
+      localStorage.removeItem('token');
+      //this.router.navigate(['/login']);
+    }
+  });
+}
+
 }

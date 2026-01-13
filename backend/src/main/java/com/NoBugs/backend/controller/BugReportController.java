@@ -1,35 +1,43 @@
 package com.NoBugs.backend.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.NoBugs.backend.dto.BugReportDTO;
 import com.NoBugs.backend.service.BugReportService;
+import com.NoBugs.backend.service.AuditLogService;
+import com.NoBugs.backend.util.RequestUtil;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PutMapping;
-
 
 @RestController
 @RequestMapping("/api/researcher/bugs")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BugReportController {
+
     private final BugReportService bugReportService;
+    private final AuditLogService auditLogService;
 
     // POST /api/researcher/bugs - Submit a new bug report
     @PostMapping
     public ResponseEntity<BugReportDTO> submitBug(@RequestBody BugReportDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bugReportService.submitBug(dto));
+
+        BugReportDTO createdBug = bugReportService.submitBug(dto);
+
+        auditLogService.log(
+                createdBug.getReporter(),
+                "CREATE",
+                "Bug",
+                createdBug.getId().toString(),
+                RequestUtil.getClientIp()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdBug);
     }
 
     // GET /api/researcher/bugs - Get all my bug reports
@@ -50,13 +58,20 @@ public class BugReportController {
         return ResponseEntity.ok(bugReportService.getBugsByOrganization(orgId));
     }
 
-    
-    // PUT http:localhost:8080/api/researcher/bugs/        
-            
+    // PUT /api/researcher/bugs/{id} - Update a bug report
     @PutMapping("/{id}")
     public ResponseEntity<BugReportDTO> updateBug(@PathVariable Long id, @RequestBody BugReportDTO dto) {
+
         BugReportDTO updatedBug = bugReportService.updateBug(id, dto);
+
+        auditLogService.log(
+                updatedBug.getReporter(),
+                "UPDATE",
+                "Bug",
+                updatedBug.getId().toString(),
+                RequestUtil.getClientIp()
+        );
+
         return ResponseEntity.ok(updatedBug);
     }
-
 }

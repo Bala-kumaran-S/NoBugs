@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ScopeService, ScopeDTO } from '../services/scope.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-scope-list',
   templateUrl: './scope-list.component.html',
-  styleUrls: ['./scope-list.component.css']
+  styleUrls: ['./scope-list.component.css'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class ScopeListComponent implements OnInit {
   scopes: ScopeDTO[] = [];

@@ -86,11 +86,18 @@ public class BugReport {
      * Used to set the `uniqueId` and `submittedAt` timestamp automatically.
      */
     @PrePersist
-    protected void onCreate() {
-        // Generate a UUID for uniqueId if it's not already set
-        if (this.uniqueId == null) {
-            this.uniqueId = UUID.randomUUID().toString();
-        }
-        submittedAt = LocalDateTime.now(); // Set to current timestamp
+protected void onCreate() {
+    if (this.uniqueId == null) {
+        this.uniqueId = UUID.randomUUID().toString();
+    }
+    if (this.submittedAt == null) {
+        this.submittedAt = LocalDateTime.now();
+    }
+}
+
+
+    public void setSeverity(String severity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setSeverity'");
     }
 }

@@ -9,7 +9,7 @@ import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
   selector: 'app-bug-report-review',
   templateUrl: './bug-report-review.component.html',
   styleUrls: ['./bug-report-review.component.css']

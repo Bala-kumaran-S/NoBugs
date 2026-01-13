@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private http: HttpClient   // ✅ inject HttpClient
+    private http: HttpClient 
   ) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -54,16 +54,21 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-  console.log("Calling backend logout...");
+  const token = localStorage.getItem('token');
 
-  this.http.post('/api/auth/logout', {}).subscribe({
-    next: () => console.log("Backend logout OK"),
-    error: (e) => console.log("Backend logout ERROR", e),
-    complete: () => {
-      localStorage.removeItem('token');
-      //this.router.navigate(['/login']);
+  this.http.post(
+    'http://localhost:8080/api/auth/logout',
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     }
+  ).subscribe(() => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
   });
 }
+
 
 }

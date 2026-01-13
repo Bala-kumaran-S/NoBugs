@@ -36,22 +36,21 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        if(1 == 1) return;
 
         System.out.println("Seeding database...");
-
-        // ---------- Researchers (seed once) ----------
+        
         User r1 = getOrCreateUser("alice", "alice@test.com", "test123", Role.RESEARCHER);
         User r2 = getOrCreateUser("bob", "bob@test.com", "test123", Role.RESEARCHER);
         User r3 = getOrCreateUser("charlie", "charlie@test.com", "test123", Role.RESEARCHER);
 
         List<User> researchers = List.of(r1, r2, r3);
 
-        // ---------- Organizations + Scopes + Bugs ----------
+        
         if (orgRepo.count() == 0) {
 
             for (int orgIndex = 1; orgIndex <= 5; orgIndex++) {
 
-                // org login user
                 User orgUser = getOrCreateUser(
                         "org" + orgIndex,
                         "org" + orgIndex + "@nobugs.com",
@@ -59,7 +58,6 @@ public class DataSeeder implements CommandLineRunner {
                         Role.ORGANIZATION
                 );
 
-                // organization entity
                 Organization org = new Organization();
                 org.setName("Organization " + orgIndex);
                 org.setDescription("Demo organization " + orgIndex);
@@ -101,8 +99,6 @@ public class DataSeeder implements CommandLineRunner {
 
         System.out.println("Seeding finished.");
     }
-
-    // ---------- Helpers ----------
 
     private User getOrCreateUser(String username, String email, String password, Role role) {
 

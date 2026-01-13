@@ -42,7 +42,6 @@ public class UserController {
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    // email
     @GetMapping(value = "/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email)
@@ -69,7 +68,6 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    // reputation update
     @PutMapping("/{userId}/reputation")
     public ResponseEntity<?> updateReputation(@PathVariable Long userId, @RequestBody Map<String, Integer> body) {
         Integer points = body.get("points");

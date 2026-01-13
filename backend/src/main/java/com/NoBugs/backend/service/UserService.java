@@ -32,6 +32,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).map(this::mapToDTO);
     }
 
+    public User getUserEntityById(Long id) {
+    return userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+}
+
     public Optional<UserDTO> getUserByEmail(String email) {
         return userRepository.findByEmail(email).map(this::mapToDTO);
     }

@@ -1,5 +1,6 @@
 package com.NoBugs.backend.controller;
 
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +13,9 @@ import com.NoBugs.backend.entity.User;
 import com.NoBugs.backend.security.JwtUtil;
 import com.NoBugs.backend.service.UserService;
 import com.NoBugs.backend.service.AuditLogService;
+import com.NoBugs.backend.service.RefreshTokenService;
 import com.NoBugs.backend.util.RequestUtil;
+import com.NoBugs.backend.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,8 +29,9 @@ public class AuthController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final AuditLogService auditLogService;
+    private final RefreshTokenService refreshTokenService;
 
-    // REGISTER
+
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody User user) {
 
@@ -35,7 +39,7 @@ public class AuthController {
         UserDTO createdUser = userService.createUser(user);
 
         auditLogService.log(
-                createdUser.getId().longValue(),   // adjust if getId() is Long already
+                createdUser.getId().longValue(),
                 "REGISTER",
                 "User",
                 createdUser.getId().toString(),
@@ -45,7 +49,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    // LOGIN
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
 
@@ -53,10 +56,8 @@ public class AuthController {
 
         if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 
-            String token = jwtUtil.generateToken(user);
-            if (token == null) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Token generation failed");
-            }
+            String accessToken = jwtUtil.generateToken(user);
+            String refreshToken = refreshTokenService.create(user.getId());
 
             auditLogService.log(
                     user.getId(),
@@ -66,7 +67,7 @@ public class AuthController {
                     RequestUtil.getClientIp()
             );
 
-            return ResponseEntity.ok(new AuthResponse(token));
+            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
         }
 
         if (user == null) {
@@ -76,18 +77,36 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody String refreshToken) {
+
+        Long userId = refreshTokenService.validate(refreshToken);
+        User user = userService.getUserEntityById(userId);
+
+        String newAccessToken = jwtUtil.generateToken(user);
+
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshToken));
+    }
+
     @PostMapping("/logout")
-        public ResponseEntity<Void> logout() {
-            System.out.println(">>> LOGOUT endpoint hit");
+    public ResponseEntity<Void> logout() {
 
-            auditLogService.log(
-                    null,
-                    "LOGOUT",
-                    "User",
-                    null,
-                    RequestUtil.getClientIp()
-            );
+        Long userId = SecurityUtil.getCurrentUserId(userService);
 
-            return ResponseEntity.ok().build();
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        refreshTokenService.revokeByUserId(userId);
+
+        auditLogService.log(
+                userId,
+                "LOGOUT",
+                "User",
+                null,
+                RequestUtil.getClientIp()
+        );
+
+        return ResponseEntity.ok().build();
+    }
 }

@@ -31,10 +31,12 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       console.log("Sending login request to /api/auth/login");
       const apiUrl = 'http://localhost:8080/api/auth/login';
-      this.http.post<{ token: string }>(apiUrl, this.loginForm.value).subscribe({
+      this.http.post<{ token: string; refreshToken: string }>(apiUrl, this.loginForm.value).subscribe({
         next: (response) => {
           // Assume response contains the token string
           localStorage.setItem('token', response.token);
+          localStorage.setItem('refreshToken', response.refreshToken);
+
           console.log('Login successful:', response);
          // this.router.navigate(['/users']); // <-- Redirect after login
          this.router.navigate(['/dashboard/research']); // <-- Redirect to researcher dashboard

@@ -67,7 +67,12 @@
             </li>
             <li *ngIf="hasToken"><hr class="dropdown-divider"></li>
             <li *ngIf="hasToken">
-              <a class="dropdown-item text-danger" href="#" (click)="logout()">Logout</a>
+              <a class="dropdown-item text-danger"
+                href="#"
+                (click)="logout(); $event.preventDefault()">
+                Logout
+              </a>
+
             </li>
           </ul>
         </li>

@@ -2,6 +2,8 @@ package com.NoBugs.backend.security;
 
 import com.NoBugs.backend.security.JwtAuthenticationFilter;
 import com.NoBugs.backend.service.UserService;
+
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 // import org.springframework.web.servlet.config.annotation.CorsRegistry;
 // import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // import static org.springframework.security.config.Customizer.withDefaults;
-
+import com.NoBugs.backend.security.RateLimitFilter;
 import java.util.List;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -34,7 +36,7 @@ public class SecurityConfig {
     }
 
      @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter, RateLimitFilter rateLimitFilter) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
             .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
@@ -42,7 +44,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll() // Allow public access to login/register
                 .anyRequest().authenticated()               // All other requests require auth
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // <-- Move here
+            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }
@@ -59,4 +63,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+    
 }

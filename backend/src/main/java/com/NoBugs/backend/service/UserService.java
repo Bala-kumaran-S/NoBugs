@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -82,7 +83,7 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
             user.getUsername(),
             user.getPassword(),
-            new ArrayList<>() // or user.getRoles() if you have authorities
+            List.of(new SimpleGrantedAuthority(user.getRole().name())) // or user.getRoles() if you have authorities
         );
     }
 
@@ -92,7 +93,7 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
             user.getEmail(), // or user.getUsername() if you prefer
             user.getPassword(),
-            new ArrayList<>() // or user.getRoles() if you have authorities
+            List.of(new SimpleGrantedAuthority(user.getRole().name()))
         );
     }
 

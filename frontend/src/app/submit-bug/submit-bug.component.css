@@ -1,0 +1,101 @@
+
+.bug-report-form-container {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 24px 28px;
+  background: #0f172a; /* dark slate */
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.bug-report-form-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.6rem;
+  color: #f8fafc;
+}
+
+.bug-report-form-container form > div {
+  margin-bottom: 16px;
+}
+
+.bug-report-form-container label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
+.bug-report-form-container input,
+.bug-report-form-container textarea,
+.bug-report-form-container select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #020617;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.bug-report-form-container textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.bug-report-form-container input:focus,
+.bug-report-form-container textarea:focus,
+.bug-report-form-container select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, opacity 0.1s;
+}
+
+button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+  opacity: 0.95;
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.error {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #f87171;
+}
+
+.success {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #4ade80;
+  text-align: center;
+}
+
+/* Mobile friendliness */
+@media (max-width: 600px) {
+  .bug-report-form-container {
+    margin: 20px 12px;
+    padding: 20px;
+  }
+}

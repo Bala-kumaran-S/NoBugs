@@ -1,8 +1,18 @@
-<h2>All Users</h2>
-<div *ngIf="error" style="color:red">{{ error }}</div>
-<ul *ngIf="users.length">
-  <li *ngFor="let user of users">
-    {{ user.username }} ({{ user.email }})
-  </li>
-</ul>
-<div *ngIf="!users.length && !error">No users found.</div>
+<div class="admin-container">
+  <div class="admin-card">
+    <h2 class="admin-title">All Users</h2>
+
+    <div *ngIf="error" class="admin-error">{{ error }}</div>
+
+    <ul *ngIf="users.length" class="admin-user-list">
+      <li *ngFor="let user of users" class="admin-user-item">
+        <span class="admin-username">{{ user.username }}</span>
+        <span class="admin-email">{{ user.email }}</span>
+      </li>
+    </ul>
+
+    <div *ngIf="!users.length && !error" class="admin-empty">
+      No users found.
+    </div>
+  </div>
+</div>

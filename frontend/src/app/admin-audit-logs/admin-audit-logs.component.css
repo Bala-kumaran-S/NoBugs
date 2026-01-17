@@ -1,0 +1,89 @@
+.admin-container {
+  padding: 24px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #0f172a; /* dark slate */
+  min-height: 100vh;
+  color: #e5e7eb;
+}
+
+.admin-card {
+  background: #111827;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.admin-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #f9fafb;
+}
+
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.audit-table th {
+  background: #1f2933;
+  color: #93c5fd;
+  text-align: left;
+  padding: 12px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.audit-table td {
+  padding: 12px;
+  border-top: 1px solid #1f2933;
+  font-size: 14px;
+  color: #d1d5db;
+}
+
+.audit-table tr:hover {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.audit-action {
+  font-weight: 600;
+}
+
+.audit-action.LOGIN { color: #22c55e; }
+.audit-action.LOGOUT { color: #f97316; }
+.audit-action.CREATE { color: #3b82f6; }
+.audit-action.UPDATE { color: #eab308; }
+.audit-action.DELETE { color: #ef4444; }
+
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pagination button {
+  background: #1f2933;
+  color: #e5e7eb;
+  border: 1px solid #374151;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background: #2563eb;
+}
+
+.pagination span {
+  color: #9ca3af;
+}
+
+.audit-time {
+  color: #9ca3af;
+  font-size: 13px;
+  font-family: monospace;
+}

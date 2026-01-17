@@ -10,7 +10,9 @@ import io.github.bucket4j.*;
 import java.io.IOException; 
 import java.time.Duration;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
@@ -53,4 +55,16 @@ public class RateLimitFilter extends OncePerRequestFilter {
             response.getWriter().write("Too many requests. Try again later.");
         }
     }
+
+    public Set<String> getBlockedIps() {
+    return buckets.entrySet().stream()
+            .filter(e -> e.getValue().getAvailableTokens() == 0)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toSet());
+    }
+
+    public void unblockIp(String ip) {
+        buckets.remove(ip);
+    }
+
 }

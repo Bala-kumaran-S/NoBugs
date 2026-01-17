@@ -1,0 +1,16 @@
+<div class="admin-container">
+  <div class="admin-card">
+    <div class="admin-title">Blocked IP Addresses</div>
+
+    <ul class="ip-list">
+      <li *ngFor="let ip of ips" class="ip-item">
+        <span class="ip-address">{{ ip }}</span>
+        <button class="unblock-btn" (click)="unblock(ip)">Unblock</button>
+      </li>
+    </ul>
+
+    <div *ngIf="ips.length === 0">
+      No blocked IPs
+    </div>
+  </div>
+</div>

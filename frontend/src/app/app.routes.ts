@@ -14,6 +14,9 @@ import { MyBugsComponent } from './bug-list/bug-list.component';
 import { BugReportReviewComponent } from './bug-report-review/bug-report-review.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { AdminAuditLogsComponent } from './admin-audit-logs/admin-audit-logs.component';
+import { AdminRateLimitsComponent } from './admin-rate-limits/admin-rate-limits.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 export const routes: Routes = [
   {
@@ -33,8 +36,6 @@ export const routes: Routes = [
   },
   { path: 'register', component: UserRegComponent },
   { path: 'login', component: LoginComponent },
-  
-  { path: 'users', component: UserListComponent },
 
   { path: 'dashboard/org/scopes', component: ScopeListComponent },
   { path: 'dashboard/org/scopes/add', component: ScopeAddComponent },
@@ -46,6 +47,18 @@ export const routes: Routes = [
   
   { path: 'user-profile', component: UserProfileComponent },
   { path: '', component: HomePageComponent },
+
+  { path: 'admin/audit-logs', component: AdminAuditLogsComponent },
+{ path: 'admin/rate-limits', component: AdminRateLimitsComponent },
+{ path: 'admin/users', component: UserListComponent },
+
+{ path: 'forbidden', component: ErrorPageComponent, data: { code: '403', message: 'Forbidden' } },
+{ path: 'not-found', component: ErrorPageComponent, data: { code: '404', message: 'Not Found' } },
+{ path: 'error', component: ErrorPageComponent, data: { code: '500', message: 'Server Error' } },
+
+{ path: '**', redirectTo: 'not-found' }
+
+
 ];
 
 @NgModule({

@@ -1,82 +1,128 @@
 <nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
   <div class="container-fluid">
+
     <a class="navbar-brand fw-bold text-gradient-animation" routerLink="/">NoBugs</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNavDropdown">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <!-- Home Link - Always visible -->
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        </li>
 
-        <!-- Researcher Links -->
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard/research" routerLinkActive="active">Researcher Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/researcher/my-bugs" routerLinkActive="active">My Bug Reports</a>
-        </li>
+  <!-- Home -->
+  <li *ngIf="!hasToken" class="nav-item">
+    <a class="nav-link" routerLink="/" routerLinkActive="active"
+       [routerLinkActiveOptions]="{exact: true}">
+      Home
+    </a>
+  </li>
 
-        <!-- Organization Admin Links -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarOrgDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Organizations
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarOrgDropdown">
-            <li><a class="dropdown-item" routerLink="/dashboard/org" routerLinkActive="active">Org Dashboard</a></li>
-            <li><a class="dropdown-item" routerLink="/dashboard/org/new" routerLinkActive="active">Create New Org</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarScopeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Scopes
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarScopeDropdown">
-            <li><a class="dropdown-item" routerLink="/dashboard/org/scopes" routerLinkActive="active">Manage Scopes</a></li>
-            <li><a class="dropdown-item" routerLink="/dashboard/org/scopes/add" routerLinkActive="active">Add New Scope</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/users" routerLinkActive="active">Users</a>
-        </li>
-      </ul>
+  <!-- Researcher -->
+  <ng-container *ngIf="hasToken && userRole === 'RESEARCHER'">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/dashboard/research" routerLinkActive="active">
+        Researcher Dashboard
+      </a>
+    </li>
 
-      <!-- Account Dropdown -->
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/researcher/my-bugs" routerLinkActive="active">
+        My Bug Reports
+      </a>
+    </li>
+  </ng-container>
+
+  <!-- Organization -->
+  <li *ngIf="hasToken && userRole === 'ORGANIZATION'" class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+      Organization
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-dark">
+      <li><a class="dropdown-item" routerLink="/dashboard/org">Dashboard</a></li>
+      <li><a class="dropdown-item" routerLink="/dashboard/org/new">Create New</a></li>
+    </ul>
+  </li>
+
+  <!-- Admin (flat links, no dropdown) -->
+  <ng-container *ngIf="hasToken && userRole === 'ADMIN'">
+
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">
+        All Users
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/admin/audit-logs" routerLinkActive="active">
+        Audit Logs
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/admin/rate-limits" routerLinkActive="active">
+        Rate Limits
+      </a>
+    </li>
+
+  </ng-container>
+
+</ul>
+
+
+
+      <!-- RIGHT SIDE ACCOUNT -->
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle d-flex align-items-center account-link" href="#" id="navbarAccountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="me-2"><i class="bi bi-person-circle"></i></span> Account
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark account-dropdown" aria-labelledby="navbarAccountDropdown">
-            <li *ngIf="!hasToken">
-              <a class="dropdown-item" routerLink="/login" routerLinkActive="active">Login</a>
-            </li>
-            <li *ngIf="!hasToken">
-              <a class="dropdown-item" routerLink="/register" routerLinkActive="active">Register</a>
-            </li>
-            <li *ngIf="hasToken">
-              <a class="dropdown-item" routerLink="/user-profile" routerLinkActive="active">User Profile</a>
-            </li>
-            <li *ngIf="hasToken">
-              <a class="dropdown-item" routerLink="/settings" routerLinkActive="active">Settings</a>
-            </li>
-            <li *ngIf="hasToken">
-              <a class="dropdown-item" routerLink="/contact" routerLinkActive="active">Contact Us</a>
-            </li>
-            <li *ngIf="hasToken"><hr class="dropdown-divider"></li>
-            <li *ngIf="hasToken">
-              <a class="dropdown-item text-danger"
-                href="#"
-                (click)="logout(); $event.preventDefault()">
-                Logout
-              </a>
 
-            </li>
+        <li class="nav-item dropdown">
+
+          <a class="nav-link dropdown-toggle d-flex align-items-center account-link"
+             href="#" role="button" data-bs-toggle="dropdown">
+
+            <span class="me-2"><i class="bi bi-person-circle"></i></span>
+
+            <ng-container *ngIf="hasToken; else guestLabel">
+              {{ username }} <small class="text-warning ms-1">⭐ {{ reputation }}</small>
+            </ng-container>
+
+            <ng-template #guestLabel>
+              Account
+            </ng-template>
+
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+
+            <!-- Guest -->
+            <ng-container *ngIf="!hasToken">
+              <li><a class="dropdown-item" routerLink="/login">Login</a></li>
+              <li><a class="dropdown-item" routerLink="/register">Register</a></li>
+            </ng-container>
+
+            <!-- Logged in -->
+            <ng-container *ngIf="hasToken">
+              <li><a class="dropdown-item" routerLink="/user-profile">User Profile</a></li>
+              <li><a class="dropdown-item" routerLink="/contact">Contact Us</a></li>
+
+              <li><hr class="dropdown-divider"></li>
+
+              <li>
+                <a class="dropdown-item text-danger"
+                   href="#"
+                   (click)="logout(); $event.preventDefault()">
+                  Logout
+                </a>
+              </li>
+            </ng-container>
+
           </ul>
         </li>
+
       </ul>
+
     </div>
   </div>
 </nav>

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Organization {
+  isApproved: boolean;
   id: number;
   name: string;
   email: string;

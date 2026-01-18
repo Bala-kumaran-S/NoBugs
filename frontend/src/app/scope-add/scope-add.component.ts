@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { ScopeService, ScopeDTO } from '../services/scope.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-scope-add',
@@ -14,8 +15,6 @@ import { CommonModule } from '@angular/common';
 export class ScopeAddComponent implements OnInit {
   scopeForm: FormGroup;
   submitted = false;
-  error = '';
-  success = '';
   isEdit = false;
   scopeId?: number;
 
@@ -23,7 +22,8 @@ export class ScopeAddComponent implements OnInit {
     private fb: FormBuilder,
     private scopeService: ScopeService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notify: NotifyService
   ) {
     this.scopeForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(255)]],
@@ -41,7 +41,7 @@ export class ScopeAddComponent implements OnInit {
     if (this.isEdit) {
       this.scopeService.getScopeById(this.scopeId!).subscribe({
         next: scope => this.scopeForm.patchValue(scope),
-        error: () => this.error = 'Failed to load scope.'
+        error: () => this.notify.error('Failed to load scope.')
       });
     }
   }
@@ -50,8 +50,6 @@ export class ScopeAddComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    this.error = '';
-    this.success = '';
 
     if (this.scopeForm.invalid) return;
 
@@ -59,18 +57,18 @@ export class ScopeAddComponent implements OnInit {
     if (this.isEdit) {
       this.scopeService.updateScope(this.scopeId!, scope).subscribe({
         next: () => {
-          this.success = 'Scope updated!';
+          this.notify.success('Scope updated!');
           setTimeout(() => this.router.navigate(['/org/scopes']), 1000);
         },
-        error: err => this.error = err.error?.message || 'Failed to update scope.'
+        error: err => this.notify.error(err.error?.message || 'Failed to update scope.')
       });
     } else {
       this.scopeService.addScope(scope).subscribe({
         next: () => {
-          this.success = 'Scope added!';
+          this.notify.success('Scope added!');
           setTimeout(() => this.router.navigate(['/dashboard/org']), 1000);
         },
-        error: err => this.error = err.error?.message || 'Failed to add scope.'
+        error: err => this.notify.error(err.error?.message || 'Failed to add scope.')
       });
     }
   }

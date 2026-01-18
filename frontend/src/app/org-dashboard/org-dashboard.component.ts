@@ -4,6 +4,7 @@ import { BugService } from '../services/bug.service';
 import { ScopeService } from '../services/scope.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-org-dashboard',
@@ -13,18 +14,20 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule]
 })
 export class OrgDashboardComponent implements OnInit {
+
   organization: any;
-  approvalStatus: string = '';
+  approvalStatus = '';
   scopes: any[] = [];
   bugs: any[] = [];
   loading = true;
-  error = '';
-  
+
+  private firstLoad = true;
 
   constructor(
     private orgService: OrganizationService,
     private bugService: BugService,
-    private scopeService: ScopeService
+    private scopeService: ScopeService,
+    private notify: NotifyService
   ) {}
 
   ngOnInit() {
@@ -33,43 +36,57 @@ export class OrgDashboardComponent implements OnInit {
 
   loadDashboard() {
     this.loading = true;
-    this.error = '';
+    this.notify.info('Loading organization dashboard...');
+
     this.orgService.getMyOrganization().subscribe({
       next: org => {
         this.organization = org;
+
         this.approvalStatus =
-        this.organization?.isApproved === true ? 'approved' :
-        this.organization?.isApproved === false ? 'rejected' :
-        'pending';
+          org?.isApproved === true ? 'approved' :
+          org?.isApproved === false ? 'rejected' :
+          'pending';
 
         this.loadScopes();
         this.loadBugs();
-        console.log('Loaded organization:', this.organization);
+
         this.loading = false;
+
+        if (this.firstLoad) {
+          this.notify.success('Organization dashboard loaded');
+          this.firstLoad = false;
+        }
       },
-      error: err => {
-        this.error = 'Failed to load organization info.';
+      error: () => {
         this.loading = false;
+        this.notify.error('Failed to load organization info.');
       }
     });
   }
 
   loadScopes() {
+    if (!this.organization?.id) return;
+
     this.scopeService.getScopesByOrganizationId(this.organization.id).subscribe({
       next: scopes => {
-        this.scopes = scopes
+        this.scopes = scopes;
       },
-      error: () => this.error = 'Failed to load scopes.'
+      error: () => {
+        this.notify.error('Failed to load scopes.');
+      }
     });
   }
 
   loadBugs() {
-    this.bugService.getBugsForMyOrganization(this.organization.id).subscribe({
+    if (!this.organization?.id) return;
 
-      next: bugs => this.bugs = bugs,
-      error: () => this.error = 'Failed to load bug reports.'
+    this.bugService.getBugsForMyOrganization(this.organization.id).subscribe({
+      next: bugs => {
+        this.bugs = bugs;
+      },
+      error: () => {
+        this.notify.error('Failed to load bug reports.');
+      }
     });
   }
-
-  // Add more methods for editing scopes, reviewing bugs, etc.
 }

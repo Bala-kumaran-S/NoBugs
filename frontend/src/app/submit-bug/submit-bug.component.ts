@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BugService, BugReportDTO } from '../services/bug.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-submit-bug',
@@ -11,19 +12,21 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [ReactiveFormsModule]
 })
 export class SubmitBugComponent {
+
   bugForm: FormGroup;
   submitted = false;
-  error = '';
-  success = '';
+  submitting = false;
   scopeId: number;
 
   constructor(
     private fb: FormBuilder,
     private bugService: BugService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private notify: NotifyService
   ) {
     this.scopeId = Number(this.route.snapshot.paramMap.get('scopeId'));
+
     this.bugForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(255)]],
       description: ['', [Validators.required]],
@@ -34,14 +37,19 @@ export class SubmitBugComponent {
     });
   }
 
-  get f() { return this.bugForm.controls; }
+  get f() {
+    return this.bugForm.controls;
+  }
 
   onSubmit() {
     this.submitted = true;
-    this.error = '';
-    this.success = '';
 
-    if (this.bugForm.invalid) return;
+    if (this.bugForm.invalid || this.submitting) {
+      return;
+    }
+
+    this.submitting = true;
+    this.notify.info('Submitting bug report...');
 
     const bug: BugReportDTO = {
       ...this.bugForm.value,
@@ -50,11 +58,16 @@ export class SubmitBugComponent {
 
     this.bugService.submitBug(bug).subscribe({
       next: () => {
-        this.success = 'Bug report submitted!';
-        setTimeout(() => this.router.navigate(['/dashboard/research']), 1500);
+        this.notify.success('Bug report submitted!');
+        this.submitting = false;
+
+        setTimeout(() => {
+          this.router.navigate(['/dashboard/research']);
+        }, 1200);
       },
       error: err => {
-        this.error = err.error?.message || 'Failed to submit bug report.';
+        this.submitting = false;
+        this.notify.error(err?.error?.message || 'Failed to submit bug report.');
       }
     });
   }

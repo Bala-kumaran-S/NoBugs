@@ -1,8 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-dark custom-navbar shadow-sm">
   <div class="container-fluid">
 
-    <a class="navbar-brand fw-bold text-gradient-animation" routerLink="/">NoBugs</a>
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold text-gradient-animation" routerLink="/">
+      NoBugs
+    </a>
 
+    <!-- Mobile toggle -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNavDropdown">
       <span class="navbar-toggler-icon"></span>
@@ -10,71 +14,100 @@
 
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
 
+      <!-- ================= LEFT NAV ================= -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-  <!-- Home -->
-  <li *ngIf="!hasToken" class="nav-item">
-    <a class="nav-link" routerLink="/" routerLinkActive="active"
-       [routerLinkActiveOptions]="{exact: true}">
-      Home
-    </a>
-  </li>
+        <!-- Home (always visible) -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active"
+             [routerLinkActiveOptions]="{ exact: true }">
+            Home
+          </a>
+        </li>
 
-  <!-- Researcher -->
-  <ng-container *ngIf="hasToken && userRole === 'RESEARCHER'">
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/dashboard/research" routerLinkActive="active">
-        Researcher Dashboard
-      </a>
-    </li>
+        <!-- ---------- Guest ---------- -->
+        <ng-container *ngIf="!hasToken">
 
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/researcher/my-bugs" routerLinkActive="active">
-        My Bug Reports
-      </a>
-    </li>
-  </ng-container>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard/research">
+              Researcher Dashboard
+            </a>
+          </li>
 
-  <!-- Organization -->
-  <li *ngIf="hasToken && userRole === 'ORGANIZATION'" class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-      Organization
-    </a>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login">
+              Login
+            </a>
+          </li>
 
-    <ul class="dropdown-menu dropdown-menu-dark">
-      <li><a class="dropdown-item" routerLink="/dashboard/org">Dashboard</a></li>
-      <li><a class="dropdown-item" routerLink="/dashboard/org/new">Create New</a></li>
-    </ul>
-  </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register">
+              Register
+            </a>
+          </li>
 
-  <!-- Admin (flat links, no dropdown) -->
-  <ng-container *ngIf="hasToken && userRole === 'ADMIN'">
+        </ng-container>
 
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">
-        All Users
-      </a>
-    </li>
+        <!-- ---------- Researcher ---------- -->
+        <ng-container *ngIf="hasToken && userRole === 'RESEARCHER'">
 
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/admin/audit-logs" routerLinkActive="active">
-        Audit Logs
-      </a>
-    </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard/research">
+              Dashboard
+            </a>
+          </li>
 
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/admin/rate-limits" routerLinkActive="active">
-        Rate Limits
-      </a>
-    </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/researcher/my-bugs">
+              My Bug Reports
+            </a>
+          </li>
 
-  </ng-container>
+        </ng-container>
 
-</ul>
+        <!-- ---------- Organization ---------- -->
+        <ng-container *ngIf="hasToken && userRole === 'ORGANIZATION'">
 
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard/org">
+              Organization Dashboard
+            </a>
+          </li>
 
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard/org/new">
+              Create Program
+            </a>
+          </li>
 
-      <!-- RIGHT SIDE ACCOUNT -->
+        </ng-container>
+
+        <!-- ---------- Admin ---------- -->
+        <ng-container *ngIf="hasToken && userRole === 'ADMIN'">
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/users">
+              All Users
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/audit-logs">
+              Audit Logs
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin/rate-limits">
+              Rate Limits
+            </a>
+          </li>
+
+        </ng-container>
+
+      </ul>
+
+      <!-- ================= ACCOUNT (RIGHT) ================= -->
       <ul class="navbar-nav ms-auto">
 
         <li class="nav-item dropdown">
@@ -82,10 +115,13 @@
           <a class="nav-link dropdown-toggle d-flex align-items-center account-link"
              href="#" role="button" data-bs-toggle="dropdown">
 
-            <span class="me-2"><i class="bi bi-person-circle"></i></span>
+            <span class="me-2">
+              <i class="bi bi-person-circle"></i>
+            </span>
 
             <ng-container *ngIf="hasToken; else guestLabel">
-              {{ username }} <small class="text-warning ms-1">⭐ {{ reputation }}</small>
+              {{ username }}
+              <small class="text-warning ms-1">⭐ {{ reputation }}</small>
             </ng-container>
 
             <ng-template #guestLabel>
@@ -96,13 +132,13 @@
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
 
-            <!-- Guest -->
+            <!-- Guest menu -->
             <ng-container *ngIf="!hasToken">
               <li><a class="dropdown-item" routerLink="/login">Login</a></li>
               <li><a class="dropdown-item" routerLink="/register">Register</a></li>
             </ng-container>
 
-            <!-- Logged in -->
+            <!-- Logged in menu -->
             <ng-container *ngIf="hasToken">
               <li><a class="dropdown-item" routerLink="/user-profile">User Profile</a></li>
               <li><a class="dropdown-item" routerLink="/contact">Contact Us</a></li>

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Router } from '@angular/router'; // <-- Import Router
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,15 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule]
 })
 export class LoginComponent {
+
   loginForm: FormGroup;
   submitted = false;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router // <-- Inject Router
+    private router: Router,
+    private notify: NotifyService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -28,23 +31,35 @@ export class LoginComponent {
 
   onSubmit() {
     this.submitted = true;
-    if (this.loginForm.valid) {
-      console.log("Sending login request to /api/auth/login");
-      const apiUrl = 'http://localhost:8080/api/auth/login';
-      this.http.post<{ token: string; refreshToken: string }>(apiUrl, this.loginForm.value).subscribe({
+
+    if (!this.loginForm.valid) {
+      this.notify.info('Please fill in all required fields correctly.');
+      return;
+    }
+
+    this.notify.info('Signing you in...');
+
+    const apiUrl = 'http://localhost:8080/api/auth/login';
+
+    this.http.post<{ token: string; refreshToken: string }>(apiUrl, this.loginForm.value)
+      .subscribe({
         next: (response) => {
-          // Assume response contains the token string
           localStorage.setItem('token', response.token);
           localStorage.setItem('refreshToken', response.refreshToken);
 
-          console.log('Login successful:', response);
-         // this.router.navigate(['/users']); // <-- Redirect after login
-         this.router.navigate(['/dashboard/research']); // <-- Redirect to researcher dashboard
+          this.notify.success('Login successful');
+
+          this.router.navigate(['/dashboard/research']);
         },
         error: (error) => {
           console.error('Login failed:', error);
+
+          if (error.status === 401) {
+            this.notify.error('Invalid email or password.');
+          } else {
+            this.notify.error('Login failed. Please try again.');
+          }
         }
       });
-    }
   }
 }

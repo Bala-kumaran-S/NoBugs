@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService } from '../services/admin.service';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   standalone: true,
@@ -9,26 +10,49 @@ import { AdminService } from '../services/admin.service';
   templateUrl: './admin-rate-limits.component.html',
   styleUrls: ['./admin-rate-limits.component.css']
 })
-
 export class AdminRateLimitsComponent implements OnInit {
 
   ips: string[] = [];
+  private firstLoad = true;
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private notify: NotifyService
+  ) {}
 
   ngOnInit() {
     this.load();
   }
 
   load() {
-    this.adminService.getBlockedIps().subscribe(data => {
-      this.ips = data;
+    this.notify.info('Loading blocked IPs...');
+
+    this.adminService.getBlockedIps().subscribe({
+      next: data => {
+        this.ips = data;
+
+        if (this.firstLoad) {
+          this.notify.success('Rate limit data loaded');
+          this.firstLoad = false;
+        }
+      },
+      error: () => {
+        this.notify.error('Failed to load blocked IPs.');
+      }
     });
   }
 
   unblock(ip: string) {
-    this.adminService.unblockIp(ip).subscribe(() => {
-      this.load();
+    this.notify.info(`Unblocking ${ip}...`);
+
+    this.adminService.unblockIp(ip).subscribe({
+      next: () => {
+        this.notify.success(`IP ${ip} unblocked`);
+        this.load();
+      },
+      error: () => {
+        this.notify.error(`Failed to unblock ${ip}`);
+      }
     });
   }
 }

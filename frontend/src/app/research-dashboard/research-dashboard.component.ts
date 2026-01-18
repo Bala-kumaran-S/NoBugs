@@ -4,15 +4,16 @@ import { Router } from '@angular/router';
 import { ScopeService, ScopeDTO } from '../services/scope.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router'; // <-- Add this import
+import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-researcher-dashboard',
   templateUrl: './research-dashboard.component.html',
   styleUrls: ['./research-dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule], // <-- Add RouterModule here
+  imports: [CommonModule, FormsModule, RouterModule],
   animations: [
     trigger('listAnimation', [
       transition('* <=> *', [
@@ -34,33 +35,50 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
   ]
 })
 export class ResearchDashboardComponent implements OnInit {
+
   bugReports: BugReport[] = [];
+  organizations: OrganizationSummary[] = [];
+  filteredOrganizations: OrganizationSummary[] = [];
+
   loadingOrgs = true;
   loadingBugs = true;
-  errorOrgs = '';
-  errorBugs = '';
-  selectedTab: 'orgs' | 'bugs' = 'orgs'; // default to orgs tab
-  searchTerm: string = '';
-  filteredOrganizations: OrganizationSummary[] = [];
-  organizations: OrganizationSummary[] = []; // Make sure this is set when you load orgs
+
+  selectedTab: 'orgs' | 'bugs' = 'orgs';
+  searchTerm = '';
+
+  private firstOrgLoad = true;
+  private firstBugLoad = true;
 
   constructor(
     private dashboardService: ResearchDashService,
     private scopeService: ScopeService,
-    private router: Router
+    private router: Router,
+    private notify: NotifyService
   ) {}
 
   ngOnInit() {
+    this.loadOrganizations();
+    this.loadMyBugs();
+  }
+
+  private loadOrganizations() {
+    this.notify.info('Loading organizations...');
+
     this.dashboardService.getPublicOrganizations().subscribe({
       next: orgs => {
         this.organizations = orgs;
-        this.filteredOrganizations = orgs; // Show all by default
+        this.filteredOrganizations = orgs;
         this.loadingOrgs = false;
 
+        if (this.firstOrgLoad) {
+          this.notify.success('Organizations loaded');
+          this.firstOrgLoad = false;
+        }
+
+        // Load scopes for each organization
         this.organizations.forEach(org => {
           this.scopeService.getScopesByOrganizationId(org.id).subscribe({
             next: scopes => {
-              // only keep simplified scope data
               org.scopes = scopes.map(scope => ({
                 id: scope.id,
                 title: scope.title,
@@ -69,7 +87,6 @@ export class ResearchDashboardComponent implements OnInit {
                 type: scope.type,
                 createdAt: scope.createdAt
               }));
-              console.log(`Loaded scopes for organization ${org}:`, org.scopes);
             },
             error: () => {
               org.scopes = [];
@@ -78,34 +95,41 @@ export class ResearchDashboardComponent implements OnInit {
         });
       },
       error: () => {
-        this.errorOrgs = 'Failed to load organizations.';
         this.loadingOrgs = false;
+        this.notify.error('Failed to load organizations.');
       }
     });
+  }
+
+  private loadMyBugs() {
+    this.notify.info('Loading your bug reports...');
 
     this.dashboardService.getMyBugReports().subscribe({
       next: bugs => {
         this.bugReports = bugs;
         this.loadingBugs = false;
+
+        if (this.firstBugLoad) {
+          this.notify.success('Bug reports loaded');
+          this.firstBugLoad = false;
+        }
       },
       error: () => {
-        this.errorBugs = 'Failed to load bug reports.';
         this.loadingBugs = false;
+        this.notify.error('Failed to load bug reports.');
       }
     });
   }
 
   onSearchChange() {
     const term = this.searchTerm.trim().toLowerCase();
-    if (term === '') {
-      // If search box is empty, show all orgs
-      this.filteredOrganizations = this.organizations;
-    } else {
-      // Otherwise, filter by name
-      this.filteredOrganizations = this.organizations.filter(org =>
-        org.name.toLowerCase().includes(term)
-      );
-    }
+
+    this.filteredOrganizations =
+      term === ''
+        ? this.organizations
+        : this.organizations.filter(org =>
+            org.name.toLowerCase().includes(term)
+          );
   }
 
   viewScopes(org: OrganizationSummary) {

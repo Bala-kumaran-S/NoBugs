@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   standalone: true,
@@ -28,7 +29,8 @@ export class BugReportReviewComponent implements OnInit {
     private bugService: BugService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private http: HttpClient // Inject HttpClient
+    private http: HttpClient,
+    private notify: NotifyService // Inject HttpClient
   ) {
     this.reviewForm = this.fb.group({
       status: ['SUBMITTED'],
@@ -51,38 +53,63 @@ export class BugReportReviewComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.error = 'Failed to load bug report.';
+        this.notify.error('Failed to load bug report.');
         this.loading = false;
       }
     });
   }
 
   onSubmitReview() {
-    if (!this.bug) return;
-    const updated = {
-      ...this.bug,
-      ...this.reviewForm.value
-    };
+  if (!this.bug) return;
 
-    // First, update the bug report
-    this.bugService.updateBug(this.bug.id!, updated).subscribe({
-      next: bug => {
-        this.success = 'Bug report updated!';
-        this.bug = bug;
+  const updated = {
+    ...this.bug,
+    ...this.reviewForm.value
+  };
 
-        // Then, update the reputation (if you want to do it automatically)
-        const userId = bug.reporter;
-        if (userId && this.reputationPoints) {
-          const token = localStorage.getItem('token');
-          const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-          this.http.put(`http://localhost:8080/api/users/${userId}/reputation`, { points: this.reputationPoints },  { headers })
-            .subscribe({
-              next: () => this.success += ' Reputation updated!',
-              error: () => this.error = 'Bug updated, but failed to update reputation.'
-            });
-        }
-      },
-      error: () => this.error = 'Failed to update bug report.'
-    });
+  this.bugService.updateBug(this.bug.id!, updated).subscribe({
+    next: bug => {
+      this.bug = bug;
+      this.notify.success('Bug report updated!');
+
+      const userId = bug.reporter;
+      const severity = updated.adminSeverity;
+      const points = this.calculateReputation(severity);
+
+      if (userId != null && points > 0) {
+        const token = localStorage.getItem('token');
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        });
+
+        this.http.put(
+          `http://localhost:8080/api/users/${userId}/reputation`,
+          { points },
+          { headers }
+        ).subscribe({
+          next: () => {
+            this.notify.success('Bug report updated and reputation updated!');
+          },
+          error: () => {
+            this.notify.error('Bug updated, but failed to update reputation.');
+          }
+        });
+      }
+    },
+    error: () => {
+      this.notify.error('Failed to update bug report.');
+    }
+  });
+}
+
+  private calculateReputation(severity: string): number {
+  switch (severity) {
+    case 'CRITICAL': return 50;
+    case 'HIGH': return 30;
+    case 'MEDIUM': return 15;
+    case 'LOW': return 5;
+    default: return 0;
   }
+}
+
 }

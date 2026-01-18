@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { OrganizationService } from '../services/organization.service';
 import { Router } from '@angular/router';
+import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-org-create',
@@ -13,13 +14,12 @@ import { Router } from '@angular/router';
 export class OrgCreateComponent {
   orgForm: FormGroup;
   submitted = false;
-  error = '';
-  success = '';
 
   constructor(
     private fb: FormBuilder,
     private orgService: OrganizationService,
-    private router: Router
+    private router: Router,
+    private notify: NotifyService
   ) {
     this.orgForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -32,8 +32,6 @@ export class OrgCreateComponent {
 
   onSubmit() {
     this.submitted = true;
-    this.error = '';
-    this.success = '';
 
     if (this.orgForm.invalid) {
       return;
@@ -41,13 +39,11 @@ export class OrgCreateComponent {
 
     this.orgService.registerOrganization(this.orgForm.value).subscribe({
       next: org => {
-        console.log("registration sucess");
-        this.success = 'Organization registered successfully!';
+        this.notify.success('Organization registered successfully!');
         setTimeout(() => this.router.navigate(['/organization/view']), 1500);
       },
       error: err => {
-        console.log("org reg failed");
-        this.error = err.error?.message || 'Registration failed. Please try again.';
+        this.notify.error(err.error?.message || 'Registration failed. Please try again.');
       }
     });
   }

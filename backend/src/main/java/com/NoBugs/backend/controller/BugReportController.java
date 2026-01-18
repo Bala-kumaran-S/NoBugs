@@ -61,7 +61,9 @@ public class BugReportController {
     // PUT /api/researcher/bugs/{id} - Update a bug report
     @PutMapping("/{id}")
     public ResponseEntity<BugReportDTO> updateBug(@PathVariable Long id, @RequestBody BugReportDTO dto) {
-
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("Updating bug report with ID: " + id);
+        System.out.println("New Title: " + dto.getTitle());
         BugReportDTO updatedBug = bugReportService.updateBug(id, dto);
 
         auditLogService.log(

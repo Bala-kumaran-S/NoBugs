@@ -49,7 +49,7 @@ export class SubmitBugComponent {
     }
 
     this.submitting = true;
-    this.notify.info('Submitting bug report...');
+    //this.notify.info('Submitting bug report...');
 
     const bug: BugReportDTO = {
       ...this.bugForm.value,

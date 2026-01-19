@@ -10,13 +10,15 @@ import { UserListComponent } from './user-list/user-list.component';
 import { ScopeListComponent } from './scope-list/scope-list.component';
 import { ScopeAddComponent } from './scope-add/scope-add.component';
 import { SubmitBugComponent } from './submit-bug/submit-bug.component';
-import { MyBugsComponent } from './bug-list/bug-list.component';
+import { BugListComponent } from './bug-list/bug-list.component';
 import { BugReportReviewComponent } from './bug-report-review/bug-report-review.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { AdminAuditLogsComponent } from './admin-audit-logs/admin-audit-logs.component';
 import { AdminRateLimitsComponent } from './admin-rate-limits/admin-rate-limits.component';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { HowItWorksComponent } from './how-it-works/how-it-works.component';
+import { BugViewComponent } from './bug-view/bug-view.component';
 
 export const routes: Routes = [
   {
@@ -39,12 +41,24 @@ export const routes: Routes = [
 
   { path: 'dashboard/org/scopes', component: ScopeListComponent },
   { path: 'dashboard/org/scopes/add', component: ScopeAddComponent },
+  {
+  path: 'researcher/scopes/:scopeId',
+  loadComponent: () =>
+    import('./view-scope/view-scope.component')
+      .then(m => m.ViewScopeComponent)
+},
+
+
   { path: 'dashboard/org/scopes/:id/edit', component: ScopeAddComponent },
   { path: 'dashboard/org/bugs/:id/review', component: BugReportReviewComponent },
 
   { path: 'researcher/bug-report/:scopeId', component: SubmitBugComponent },
-  { path: 'researcher/my-bugs', component: MyBugsComponent },
-  
+  { path: 'researcher/my-bugs', component: BugListComponent },
+  {
+  path: 'researcher/bugs/:id',
+  component: BugViewComponent
+},
+
   { path: 'user-profile', component: UserProfileComponent },
   { path: '', component: HomePageComponent },
 
@@ -56,6 +70,7 @@ export const routes: Routes = [
 { path: 'not-found', component: ErrorPageComponent, data: { code: '404', message: 'Not Found' } },
 { path: 'error', component: ErrorPageComponent, data: { code: '500', message: 'Server Error' } },
 
+{path : 'how-it-works', component: HowItWorksComponent },
 { path: '**', redirectTo: 'not-found' }
 
 

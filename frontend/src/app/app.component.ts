@@ -9,6 +9,8 @@ import { NgIf } from '@angular/common';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './services/user.service';
 import { NotifyService } from './services/notify.service';
+import { OrganizationService } from './services/organization.service';
+
 
 @Component({
   selector: 'app-root',
@@ -39,6 +41,8 @@ export class AppComponent implements OnInit {
   userRole: string | null = null;
   username = '';
   reputation = 0;
+  hasOrganization = false;
+
 
   private profileLoadFailed = false;
 
@@ -47,7 +51,8 @@ export class AppComponent implements OnInit {
     private http: HttpClient,
     public auth: AuthService,
     private userService: UserService,
-    private notify: NotifyService
+    private notify: NotifyService,
+    private orgService: OrganizationService
   ) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -57,8 +62,24 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.refreshUser();
-  }
+  this.checkOrganization();
+}
+
+
+  checkOrganization() {
+  this.orgService.getMyOrganization().subscribe({
+    next: (org) => {
+      console.log('ORG FOUND', org);
+      this.hasOrganization = true;
+    },
+    error: (err) => {
+      console.log('NO ORG', err.status);
+      this.hasOrganization = false;
+    }
+  });
+}
+
+
 
   refreshUser() {
     this.hasToken = this.auth.isLoggedIn();
@@ -113,7 +134,7 @@ export class AppComponent implements OnInit {
         localStorage.removeItem('refreshToken');
         this.refreshUser();
 
-        this.notify.success('Logged out');
+        //this.notify.success('Logged out');
         this.router.navigate(['/login']);
       },
       error: () => {

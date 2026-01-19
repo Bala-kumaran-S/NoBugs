@@ -5,13 +5,14 @@ import { ScopeService } from '../services/scope.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NotifyService } from '../services/notify.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-org-dashboard',
   templateUrl: './org-dashboard.component.html',
   styleUrls: ['./org-dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, FormsModule]
 })
 export class OrgDashboardComponent implements OnInit {
 
@@ -20,6 +21,14 @@ export class OrgDashboardComponent implements OnInit {
   scopes: any[] = [];
   bugs: any[] = [];
   loading = true;
+
+  pageSize = 5;
+  currentPage = 1;
+
+  sortField: 'submittedAt' | 'title' | 'severity' = 'submittedAt';
+  sortDirection: 'asc' | 'desc' = 'desc';
+
+  searchTerm = '';
 
   private firstLoad = true;
 
@@ -36,7 +45,6 @@ export class OrgDashboardComponent implements OnInit {
 
   loadDashboard() {
     this.loading = true;
-    this.notify.info('Loading organization dashboard...');
 
     this.orgService.getMyOrganization().subscribe({
       next: org => {
@@ -53,7 +61,7 @@ export class OrgDashboardComponent implements OnInit {
         this.loading = false;
 
         if (this.firstLoad) {
-          this.notify.success('Organization dashboard loaded');
+          //this.notify.success('Organization dashboard loaded');
           this.firstLoad = false;
         }
       },
@@ -89,4 +97,36 @@ export class OrgDashboardComponent implements OnInit {
       }
     });
   }
+
+  get filteredBugs() {
+  return this.bugs.filter(bug =>
+    bug.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+  );
+}
+
+get sortedBugs() {
+  return [...this.filteredBugs].sort((a, b) => {
+    let aVal = a[this.sortField];
+    let bVal = b[this.sortField];
+
+    if (this.sortField === 'submittedAt') {
+      aVal = new Date(aVal).getTime();
+      bVal = new Date(bVal).getTime();
+    }
+
+    if (aVal < bVal) return this.sortDirection === 'asc' ? -1 : 1;
+    if (aVal > bVal) return this.sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+
+get paginatedBugs() {
+  const start = (this.currentPage - 1) * this.pageSize;
+  return this.sortedBugs.slice(start, start + this.pageSize);
+}
+
+get totalPages() {
+  return Math.ceil(this.sortedBugs.length / this.pageSize);
+}
+
 }

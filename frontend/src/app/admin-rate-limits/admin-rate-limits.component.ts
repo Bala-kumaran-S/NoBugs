@@ -25,14 +25,14 @@ export class AdminRateLimitsComponent implements OnInit {
   }
 
   load() {
-    this.notify.info('Loading blocked IPs...');
+    //this.notify.info('Loading blocked IPs...');
 
     this.adminService.getBlockedIps().subscribe({
       next: data => {
         this.ips = data;
 
         if (this.firstLoad) {
-          this.notify.success('Rate limit data loaded');
+          //this.notify.success('Rate limit data loaded');
           this.firstLoad = false;
         }
       },

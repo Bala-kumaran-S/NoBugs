@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ResearchDashService, BugReport } from '../services/research-dash.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NotifyService } from '../services/notify.service';
 
 @Component({
   selector: 'app-my-bugs',
   templateUrl: './bug-list.component.html',
   styleUrls: ['./bug-list.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   standalone: true
 })
-export class MyBugsComponent implements OnInit {
+export class BugListComponent implements OnInit {
 
   bugReports: BugReport[] = [];
   loadingBugs = true;
@@ -28,7 +28,7 @@ export class MyBugsComponent implements OnInit {
   }
 
   private loadBugs() {
-    this.notify.info('Loading your bug reports...');
+    //this.notify.info('Loading your bug reports...');
 
     this.dashboardService.getMyBugReports().subscribe({
       next: bugs => {
@@ -36,7 +36,7 @@ export class MyBugsComponent implements OnInit {
         this.loadingBugs = false;
 
         if (this.firstLoad) {
-          this.notify.success('Bug reports loaded');
+          //this.notify.success('Bug reports loaded');
           this.firstLoad = false;
         }
       },

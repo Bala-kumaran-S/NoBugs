@@ -3,9 +3,7 @@
 <div *ngIf="loadingBugs" class="alert alert-info text-center" role="alert">
   Loading bug reports...
 </div>
-<div *ngIf="errorBugs" class="alert alert-danger" role="alert">
-  {{ errorBugs }}
-</div>
+
   <div *ngIf="!loadingBugs && bugReports?.length === 0" class="alert alert-secondary text-center" role="alert">
   You haven't submitted any bug reports yet.
 </div>
@@ -53,9 +51,13 @@
       </div>
       <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
         <span class="text-muted small">ID: {{ bug?.id }}</span>
-        <button (click)="viewBug(bug)" class="btn btn-gradient-bug btn-sm">
-          <i class="bi bi-eye"></i> View Details
-        </button>
+        <a
+          class="btn btn-sm"
+          [routerLink]="['/researcher/bugs', bug.id]">
+          View Details
+        </a>
+
+
       </div>
     </div>
   </div>

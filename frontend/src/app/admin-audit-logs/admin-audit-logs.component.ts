@@ -27,7 +27,7 @@ export class AdminAuditLogsComponent implements OnInit {
   }
 
   load() {
-    this.notify.info('Loading audit logs...');
+    //this.notify.info('Loading audit logs...');
 
     this.adminService.getAuditLogs(this.page).subscribe({
       next: res => {
@@ -35,7 +35,7 @@ export class AdminAuditLogsComponent implements OnInit {
         this.totalPages = res.totalPages;
 
         if (this.firstLoad) {
-          this.notify.success('Audit logs loaded');
+          //this.notify.success('Audit logs loaded');
           this.firstLoad = false;
         }
       },

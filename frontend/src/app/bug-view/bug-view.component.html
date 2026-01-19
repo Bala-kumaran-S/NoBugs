@@ -1,0 +1,22 @@
+<h1>{{ bug?.title }}</h1>
+
+<span><strong>Status:</strong> {{ bug?.status }}</span>
+
+<span>
+  <strong>Submitted:</strong>
+  {{ bug?.submittedAt | date:'medium' }}
+</span>
+
+<p>{{ bug?.description }}</p>
+
+<pre>{{ bug?.stepsToReproduce }}</pre>
+
+<code>{{ bug?.affectedEndpoint }}</code>
+
+<a *ngIf="bug?.attachmentUrl1"
+   [href]="bug?.attachmentUrl1"
+   target="_blank">
+  {{ bug?.attachmentUrl1 }}
+</a>
+
+<p class="admin-notes">{{ bug?.adminNotes }}</p>

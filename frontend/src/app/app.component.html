@@ -19,43 +19,26 @@
 
         <!-- Home (always visible) -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active"
+          <a class="nav-link"
+             routerLink="/"
+             routerLinkActive="active"
              [routerLinkActiveOptions]="{ exact: true }">
             Home
           </a>
         </li>
 
-        <!-- ---------- Guest ---------- -->
-        <ng-container *ngIf="!hasToken">
-
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard/research">
-              Researcher Dashboard
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/login">
-              Login
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/register">
-              Register
-            </a>
-          </li>
-
-        </ng-container>
+        <!-- Programs (always visible, renamed researcher dashboard) -->
+        <li class="nav-item">
+          <a class="nav-link"
+             routerLink="/dashboard/research"
+             routerLinkActive="active">
+            Programs
+          </a>
+        </li>
+        
 
         <!-- ---------- Researcher ---------- -->
         <ng-container *ngIf="hasToken && userRole === 'RESEARCHER'">
-
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/dashboard/research">
-              Dashboard
-            </a>
-          </li>
 
           <li class="nav-item">
             <a class="nav-link" routerLink="/researcher/my-bugs">
@@ -68,13 +51,15 @@
         <!-- ---------- Organization ---------- -->
         <ng-container *ngIf="hasToken && userRole === 'ORGANIZATION'">
 
-          <li class="nav-item">
+          <!-- Org exists → dashboard -->
+          <li class="nav-item" *ngIf="hasOrganization">
             <a class="nav-link" routerLink="/dashboard/org">
               Organization Dashboard
             </a>
           </li>
 
-          <li class="nav-item">
+          <!-- No org → create -->
+          <li class="nav-item" *ngIf="!hasOrganization">
             <a class="nav-link" routerLink="/dashboard/org/new">
               Create Program
             </a>
@@ -104,7 +89,14 @@
           </li>
 
         </ng-container>
-
+        <li class="nav-item"
+            *ngIf="hasToken && (userRole === 'RESEARCHER' || userRole === 'ORGANIZATION')">
+          <a class="nav-link"
+             routerLink="/how-it-works"
+             routerLinkActive="active">
+            How It Works
+          </a>
+        </li>
       </ul>
 
       <!-- ================= ACCOUNT (RIGHT) ================= -->
@@ -113,7 +105,9 @@
         <li class="nav-item dropdown">
 
           <a class="nav-link dropdown-toggle d-flex align-items-center account-link"
-             href="#" role="button" data-bs-toggle="dropdown">
+             href="#"
+             role="button"
+             data-bs-toggle="dropdown">
 
             <span class="me-2">
               <i class="bi bi-person-circle"></i>
@@ -132,13 +126,13 @@
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
 
-            <!-- Guest menu -->
+            <!-- Guest -->
             <ng-container *ngIf="!hasToken">
               <li><a class="dropdown-item" routerLink="/login">Login</a></li>
               <li><a class="dropdown-item" routerLink="/register">Register</a></li>
             </ng-container>
 
-            <!-- Logged in menu -->
+            <!-- Logged in -->
             <ng-container *ngIf="hasToken">
               <li><a class="dropdown-item" routerLink="/user-profile">User Profile</a></li>
               <li><a class="dropdown-item" routerLink="/contact">Contact Us</a></li>
@@ -153,10 +147,12 @@
                 </a>
               </li>
             </ng-container>
-
+            
+            
           </ul>
         </li>
 
+        
       </ul>
 
     </div>

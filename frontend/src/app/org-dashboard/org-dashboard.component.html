@@ -13,7 +13,6 @@
 
   <section class="scopes">
     <h2>Scopes</h2>
-    <button routerLink="/scopes">Manage Scopes</button>
     <ul>
       <li *ngFor="let scope of scopes">
         <strong>{{ scope.title }}</strong> - {{ scope.targetUrl }}
@@ -27,7 +26,26 @@
 
   <section class="bugs">
     <h2>Bug Reports</h2>
-    <button routerLink="/organization/bugs">Review All</button>
+    <div class="table-controls">
+  <input
+    type="text"
+    placeholder="Search by title"
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="currentPage = 1"
+  />
+
+  <select [(ngModel)]="sortField">
+    <option value="submittedAt">Submitted Time</option>
+    <option value="title">Title</option>
+    <option value="severity">Severity</option>
+  </select>
+
+  <select [(ngModel)]="sortDirection">
+    <option value="desc">Descending</option>
+    <option value="asc">Ascending</option>
+  </select>
+</div>
+
     <table>
       <thead>
         <tr>
@@ -41,7 +59,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let bug of bugs | slice:0:25">
+        <tr *ngFor="let bug of paginatedBugs">
           <td>{{ bug.title }}</td>
           <td>{{ bug.scopeTitle }}</td>
           <td>{{ bug.reporter }}</td>
@@ -54,10 +72,25 @@
         </tr>
       </tbody>
     </table>
+    <div class="pagination" *ngIf="totalPages > 1">
+  <button
+    (click)="currentPage = currentPage - 1"
+    [disabled]="currentPage === 1">
+    Prev
+  </button>
+
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+  <button
+    (click)="currentPage = currentPage + 1"
+    [disabled]="currentPage === totalPages">
+    Next
+  </button>
+</div>
+
     <div *ngIf="bugs.length === 0">No bug reports yet.</div>
   </section>
 
-  <div *ngIf="error" class="error">{{ error }}</div>
 </div>
 
 <ng-template #loadingTpl>

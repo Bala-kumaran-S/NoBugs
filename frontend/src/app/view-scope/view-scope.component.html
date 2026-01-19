@@ -1,0 +1,41 @@
+<div class="scope-wrapper" *ngIf="!loading && scope">
+
+  <div class="header">
+    <h2>{{ scope.title }}</h2>
+    <button class="back-btn" (click)="goBack()">← Back</button>
+  </div>
+
+  <div class="url">{{ scope.targetUrl }}</div>
+
+  <p class="desc" *ngIf="scope.description">
+    {{ scope.description }}
+  </p>
+
+  <div class="rules">
+
+    <div class="rule-box">
+      <h4>In Scope</h4>
+      <pre>{{ scope.inScopeRules || '—' }}</pre>
+    </div>
+
+    <div class="rule-box">
+      <h4>Out of Scope</h4>
+      <pre>{{ scope.outOfScopeRules || '—' }}</pre>
+    </div>
+
+  </div>
+
+  <div class="meta">
+    <span>Type: {{ scope.type }}</span>
+    <span>Created: {{ scope.createdAt | date }}</span>
+  </div>
+
+  <button class="report-btn" (click)="reportBug()">
+    Report Bug
+  </button>
+
+</div>
+
+<div *ngIf="loading" class="loading">
+  Loading scope…
+</div>

@@ -62,7 +62,6 @@ export class ResearchDashboardComponent implements OnInit {
   }
 
   private loadOrganizations() {
-    this.notify.info('Loading organizations...');
 
     this.dashboardService.getPublicOrganizations().subscribe({
       next: orgs => {
@@ -71,7 +70,7 @@ export class ResearchDashboardComponent implements OnInit {
         this.loadingOrgs = false;
 
         if (this.firstOrgLoad) {
-          this.notify.success('Organizations loaded');
+          //this.notify.success('Organizations loaded');
           this.firstOrgLoad = false;
         }
 
@@ -102,7 +101,6 @@ export class ResearchDashboardComponent implements OnInit {
   }
 
   private loadMyBugs() {
-    this.notify.info('Loading your bug reports...');
 
     this.dashboardService.getMyBugReports().subscribe({
       next: bugs => {
@@ -110,7 +108,7 @@ export class ResearchDashboardComponent implements OnInit {
         this.loadingBugs = false;
 
         if (this.firstBugLoad) {
-          this.notify.success('Bug reports loaded');
+          //this.notify.success('Bug reports loaded');
           this.firstBugLoad = false;
         }
       },
@@ -143,4 +141,9 @@ export class ResearchDashboardComponent implements OnInit {
   viewBug(bug: BugReport) {
     this.router.navigate(['/researcher/bugs', bug.id]);
   }
+
+  viewScopeDetails(scopeId: number) {
+  this.router.navigate(['/researcher/scopes', scopeId]);
+}
+
 }

@@ -30,4 +30,12 @@ public class ScopeController {
     public ResponseEntity<List<Scope>> getScopesByOrg(@PathVariable Long orgId) {
         return ResponseEntity.ok(scopeRepository.findByOrganizationId(orgId));
     }
+
+    @GetMapping(value = "/{scopeId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Scope> getScopeDetails(@PathVariable Long scopeId) {
+        return scopeRepository.findById(scopeId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+}
+
 }

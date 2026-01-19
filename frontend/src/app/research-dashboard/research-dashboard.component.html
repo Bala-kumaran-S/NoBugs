@@ -14,7 +14,6 @@
       <button class="btn btn-outline-success my-2 my-sm-0 search" type="submit">Search</button>
     </form>
     <div *ngIf="loadingOrgs">Loading organizations...</div>
-    <div *ngIf="errorOrgs" class="error">{{ errorOrgs }}</div>
     <div *ngIf="!loadingOrgs && filteredOrganizations.length === 0">No public organizations found.</div>
     <div *ngIf="!loadingOrgs && filteredOrganizations.length > 0">
       <div *ngFor="let org of filteredOrganizations" class="org-card" [@listAnimation]>
@@ -25,7 +24,7 @@
           <li *ngFor="let scope of org.scopes">
             <strong>{{ scope.title }}</strong> ({{ scope.type }}) - {{ scope.targetUrl }}
             <div class="scopeButtons">
-            <button (click)="viewScopes(org)">View Scope Details</button>
+            <button (click)="viewScopeDetails(scope.id)">View Scope Details</button>
             <button [routerLink]="['/researcher/bug-report', scope.id]">Report Bug</button>
             </div>
           </li>

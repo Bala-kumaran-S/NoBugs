@@ -1,0 +1,114 @@
+.scope-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 32px;
+  background: #ffffff;
+  color: #1f2937; /* neutral dark */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #4b5563;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* URL */
+.url {
+  font-size: 15px;
+  color: #374151;
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+
+/* Description */
+.desc {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  color: #374151;
+}
+
+/* Rules section */
+.rules {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.rule-box {
+  padding: 20px 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.rule-box h4 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.rule-box pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* Meta info */
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #6b7280;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+  margin-bottom: 32px;
+}
+
+/* Report button */
+.report-btn {
+  padding: 12px 20px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #111827;
+  background: #111827;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.report-btn:hover {
+  background: #000000;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: #6b7280;
+}

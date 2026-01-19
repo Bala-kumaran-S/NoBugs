@@ -65,7 +65,7 @@ export class ScopeAddComponent implements OnInit {
     } else {
       this.scopeService.addScope(scope).subscribe({
         next: () => {
-          this.notify.success('Scope added!');
+          //this.notify.success('Scope added!');
           setTimeout(() => this.router.navigate(['/dashboard/org']), 1000);
         },
         error: err => this.notify.error(err.error?.message || 'Failed to add scope.')

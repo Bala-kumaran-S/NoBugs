@@ -37,7 +37,7 @@ export class LoginComponent {
       return;
     }
 
-    this.notify.info('Signing you in...');
+    //this.notify.info('Signing you in...');
 
     const apiUrl = 'http://localhost:8080/api/auth/login';
 

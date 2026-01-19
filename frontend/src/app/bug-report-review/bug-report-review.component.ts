@@ -70,7 +70,7 @@ export class BugReportReviewComponent implements OnInit {
   this.bugService.updateBug(this.bug.id!, updated).subscribe({
     next: bug => {
       this.bug = bug;
-      this.notify.success('Bug report updated!');
+      //this.notify.success('Bug report updated!');
 
       const userId = bug.reporter;
       const severity = updated.adminSeverity;

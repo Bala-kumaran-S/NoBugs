@@ -13,4 +13,6 @@ public interface ScopeRepository extends JpaRepository<Scope, Long> {
     List<Scope> findByType(ScopeType type);
 
     List<Scope> findByOrganization(Organization organization);
+
+    
 }

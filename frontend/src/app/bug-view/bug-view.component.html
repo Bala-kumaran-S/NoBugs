@@ -1,22 +1,78 @@
+<!-- Bug Header -->
 <h1>{{ bug?.title }}</h1>
 
-<span><strong>Status:</strong> {{ bug?.status }}</span>
+<div class="meta">
+  <span><strong>Status:</strong> {{ bug?.status }}</span>
+  <span>
+    <strong>Submitted:</strong>
+    {{ bug?.submittedAt | date:'medium' }}
+  </span>
+</div>
 
-<span>
-  <strong>Submitted:</strong>
-  {{ bug?.submittedAt | date:'medium' }}
-</span>
+<hr />
 
+<!-- Organization & Scope -->
+<h3>Organization Details</h3>
+
+<p>
+  <strong>Organization:</strong>
+  {{ bug?.organizationName || 'Not available' }}
+</p>
+
+<p>
+  <strong>Scope:</strong>
+  {{ bug?.scopeTitle || 'Not specified' }}
+</p>
+
+<p>
+  <strong>Scope ID:</strong>
+  {{ bug?.scopeId }}
+</p>
+
+<hr />
+
+<!-- Bug Details -->
+<h3>Bug Description</h3>
 <p>{{ bug?.description }}</p>
 
+<h3>Steps to Reproduce</h3>
 <pre>{{ bug?.stepsToReproduce }}</pre>
 
-<code>{{ bug?.affectedEndpoint }}</code>
+<h3>Affected Endpoint</h3>
+<code *ngIf="bug?.affectedEndpoint; else noEndpoint">
+  {{ bug?.affectedEndpoint }}
+</code>
 
-<a *ngIf="bug?.attachmentUrl1"
+<ng-template #noEndpoint>
+  <p class="muted">No affected endpoint provided.</p>
+</ng-template>
+
+<hr />
+
+<!-- Attachments -->
+<h3>Attachments</h3>
+
+<a *ngIf="bug?.attachmentUrl1; else noAttachment"
    [href]="bug?.attachmentUrl1"
    target="_blank">
-  {{ bug?.attachmentUrl1 }}
+  View Attachment
 </a>
 
-<p class="admin-notes">{{ bug?.adminNotes }}</p>
+<ng-template #noAttachment>
+  <p class="muted">No attachments were submitted.</p>
+</ng-template>
+
+<hr />
+
+<!-- Admin Notes -->
+<h3>Organization / Admin Notes</h3>
+
+<p *ngIf="bug?.adminNotes; else noAdminNotes" class="admin-notes">
+  {{ bug?.adminNotes }}
+</p>
+
+<ng-template #noAdminNotes>
+  <p class="muted">
+    This report has not been reviewed by the organization yet.
+  </p>
+</ng-template>

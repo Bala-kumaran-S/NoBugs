@@ -1,9 +1,9 @@
-package com.NoBugs.backend.entity;
+    package com.NoBugs.backend.entity;
 
-public enum Severity {
-    CRITICAL,
-    HIGH,
-    MEDIUM,
-    LOW,
-    INFORMATIONAL
-}
+    public enum Severity {
+        CRITICAL,
+        HIGH,
+        MEDIUM,
+        LOW,
+        INFORMATIONAL
+    }

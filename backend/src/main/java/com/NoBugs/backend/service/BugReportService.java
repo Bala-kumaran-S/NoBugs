@@ -76,7 +76,13 @@ public class BugReportService {
         dto.setStepsToReproduce(bug.getStepsToReproduce());
         dto.setAttachmentUrl1(bug.getAttachmentUrl1());
         dto.setSubmittedAt(bug.getSubmittedAt() != null ? bug.getSubmittedAt().toString() : null);
-        dto.setStatus(bug.getStatus());
+        System.out.println("In service before updating" + bug.getStatus());
+        if (bug.getStatus() != null) {
+
+            dto.setStatus(bug.getStatus());
+        }
+        System.out.println("In service after updating" + dto.getStatus());
+
         dto.setAdminNotes(bug.getAdminNotes());
         return dto;
     }
@@ -109,6 +115,10 @@ public class BugReportService {
         bug.setStepsToReproduce(dto.getStepsToReproduce());
         bug.setAttachmentUrl1(dto.getAttachmentUrl1());
         bug.setAdminNotes(dto.getAdminNotes());
+        System.out.println("Updating status to " + dto.getStatus());
+        bug.setStatus(dto.getStatus());
+        System.out.println(dto.getClass().getName());
+        System.out.println("Updated entity status to " + bug.getStatus());
 
         BugReport updated = bugReportRepo.save(bug);
         return mapToDTO(updated);

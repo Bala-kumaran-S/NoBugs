@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { NotifyService } from '../services/notify.service';
+import { environment } from '../../environment/environment';
 
 @Component({
   standalone: true,
@@ -83,7 +84,7 @@ export class BugReportReviewComponent implements OnInit {
         });
 
         this.http.put(
-          `http://localhost:8080/api/users/${userId}/reputation`,
+          `${environment.apiBaseUrl}/api/users/${userId}/reputation`,
           { points },
           { headers }
         ).subscribe({
@@ -108,6 +109,7 @@ export class BugReportReviewComponent implements OnInit {
     case 'HIGH': return 30;
     case 'MEDIUM': return 15;
     case 'LOW': return 5;
+    case 'INFORMATIONAL': return 1;
     default: return 0;
   }
 }

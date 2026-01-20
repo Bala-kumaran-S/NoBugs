@@ -18,13 +18,18 @@
 
   <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
     <div>
-      <label>Status:</label>
-      <select formControlName="status">
-        <option value="SUBMITTED">Submitted</option>
-        <option value="ACCEPTED">Accepted</option>
-        <option value="REJECTED">Rejected</option>
-      </select>
-    </div>
+  <label>Status:</label>
+  <select formControlName="status">
+    <option value="SUBMITTED">Submitted</option>
+    <option value="IN_REVIEW">In Review</option>
+    <option value="ACCEPTED">Accepted</option>
+    <option value="INVALID">Invalid</option>
+    <option value="DUPLICATE">Duplicate</option>
+    <option value="INFORMATIONAL">Informational</option>
+    <option value="NOT_APPLICABLE">Not Applicable</option>
+  </select>
+</div>
+
     <div>
       <label>Admin Severity:</label>
       <select formControlName="adminSeverity">
@@ -33,25 +38,14 @@
         <option value="HIGH">High</option>
         <option value="MEDIUM">Medium</option>
         <option value="LOW">Low</option>
+        <option value="INFORMATIONAL">Informational</option>
       </select>
     </div>
     <div>
       <label>Admin Notes:</label>
       <textarea formControlName="adminNotes"></textarea>
     </div>
-    <div class="form-group">
-  <label for="reputationPoints">Reputation Points: {{ reputationPoints }}</label>
-  <input
-    type="range"
-    id="reputationPoints"
-    min="1"
-    max="10"
-    step="1"
-    [(ngModel)]="reputationPoints"
-    name="reputationPoints"
-    style="width: 200px;"
-  />
-</div>
+    
     <button type="submit" >Update Bug Report</button>
     <div *ngIf="error" class="error">{{ error }}</div>
     <div *ngIf="success" class="success">{{ success }}</div>

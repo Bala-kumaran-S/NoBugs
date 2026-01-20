@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../environment/environment';
 
 
 export interface UserDTO {
@@ -24,6 +24,6 @@ export class UserService {
   getUserDTO(email: string): Observable<UserDTO> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get<UserDTO>(`http://localhost:8080/api/users/email/${email}`, { headers });
+    return this.http.get<UserDTO>(`${environment.apiBaseUrl}/api/users/email/${email}`, { headers });
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment';
 
 export interface ScopeDTO {
   id: number;
@@ -17,7 +18,7 @@ export interface ScopeDTO {
 
 @Injectable({ providedIn: 'root' })
 export class ScopeService {
-  private apiUrl = 'http://localhost:8080/api/scopes';
+  private apiUrl = `${environment.apiBaseUrl}/api/scopes`;
 
   constructor(private http: HttpClient) {}
 
@@ -30,7 +31,7 @@ export class ScopeService {
   addScope(scope: ScopeDTO): Observable<ScopeDTO> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.post<ScopeDTO>("http://localhost:8080/api/orgs/scopes", scope, { headers });
+    return this.http.post<ScopeDTO>(`${environment.apiBaseUrl}/api/orgs/scopes`, scope, { headers });
   }
 
   updateScope(id: number, scope: ScopeDTO): Observable<ScopeDTO> {

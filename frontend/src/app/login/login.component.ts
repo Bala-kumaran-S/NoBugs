@@ -4,7 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotifyService } from '../services/notify.service';
-
+import { environment } from '../../environment/environment';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -39,7 +39,7 @@ export class LoginComponent {
 
     //this.notify.info('Signing you in...');
 
-    const apiUrl = 'http://localhost:8080/api/auth/login';
+    const apiUrl = `${environment.apiBaseUrl}/api/auth/login`;
 
     this.http.post<{ token: string; refreshToken: string }>(apiUrl, this.loginForm.value)
       .subscribe({

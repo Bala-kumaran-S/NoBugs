@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment';
 
 export interface OrganizationSummary {
   id: number;
@@ -30,8 +31,8 @@ export interface BugReport {
   providedIn: 'root'
 })
 export class ResearchDashService {
-  private orgsUrl = 'http://localhost:8080/api/orgs/public';
-  private myBugsUrl = 'http://localhost:8080/api/researcher/bugs';
+  private orgsUrl = `${environment.apiBaseUrl}/api/orgs/public`;
+  private myBugsUrl = `${environment.apiBaseUrl}/api/researcher/bugs`;
 
   constructor(private http: HttpClient) { }
 

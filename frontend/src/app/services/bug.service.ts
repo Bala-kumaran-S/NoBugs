@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment';
 
 export interface BugReportDTO {
   id?: number;
@@ -23,7 +24,7 @@ export interface BugReportDTO {
 
 @Injectable({ providedIn: 'root' })
 export class BugService {
-  private apiUrl = 'http://localhost:8080/api/researcher/bugs';
+  private apiUrl = `${environment.apiBaseUrl}/api/researcher/bugs`;
 
   constructor(private http: HttpClient) {}
 

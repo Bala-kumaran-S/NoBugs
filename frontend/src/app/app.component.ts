@@ -10,7 +10,7 @@ import { AuthService } from './auth/auth.service';
 import { UserService } from './services/user.service';
 import { NotifyService } from './services/notify.service';
 import { OrganizationService } from './services/organization.service';
-
+import { environment } from '../environment/environment';
 
 @Component({
   selector: 'app-root',
@@ -108,7 +108,7 @@ export class AppComponent implements OnInit {
       error: () => {
         // avoid spamming snackbar on every navigation
         if (!this.profileLoadFailed) {
-          this.notify.error('Failed to load user profile.');
+          //this.notify.error('Failed to load user profile.');
           this.profileLoadFailed = true;
         }
       }
@@ -121,7 +121,7 @@ export class AppComponent implements OnInit {
     this.notify.info('Signing out...');
 
     this.http.post(
-      'http://localhost:8080/api/auth/logout',
+      `${environment.apiBaseUrl}/api/auth/logout`,
       {},
       {
         headers: {

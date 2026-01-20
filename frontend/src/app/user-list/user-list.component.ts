@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-user-list',
@@ -21,7 +22,7 @@ export class UserListComponent implements OnInit {
       Authorization: `Bearer ${token}`
     });
 
-    this.http.get<any[]>('http://localhost:8080/api/users', { headers :{Authorization : `Bearer ${token}`}}).subscribe({
+    this.http.get<any[]>(`${environment.apiBaseUrl}/api/users`, { headers :{Authorization : `Bearer ${token}`}}).subscribe({
       next: (data) => this.users = data,
       error: (err) => this.error = 'Failed to load users'
     });

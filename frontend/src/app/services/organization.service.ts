@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment';
 
 export interface Organization {
   isApproved: boolean;
@@ -14,7 +15,7 @@ export interface Organization {
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationService {
-  private apiUrl = 'http://localhost:8080/api/orgs';
+  private apiUrl = `${environment.apiBaseUrl}/api/orgs`;
   
   constructor(private http: HttpClient) {}
 

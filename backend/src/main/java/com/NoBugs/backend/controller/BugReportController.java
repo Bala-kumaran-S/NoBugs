@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.NoBugs.backend.dto.BugReportDTO;
+import com.NoBugs.backend.entity.BugReport;
+import com.NoBugs.backend.entity.BugStatus;
 import com.NoBugs.backend.service.BugReportService;
 import com.NoBugs.backend.service.AuditLogService;
 import com.NoBugs.backend.util.RequestUtil;
@@ -22,6 +25,7 @@ public class BugReportController {
 
     private final BugReportService bugReportService;
     private final AuditLogService auditLogService;
+    private final com.NoBugs.backend.repository.BugReportRepository bugReportRepo;
 
     // POST /api/researcher/bugs - Submit a new bug report
     @PostMapping
@@ -59,21 +63,29 @@ public class BugReportController {
     }
 
     // PUT /api/researcher/bugs/{id} - Update a bug report
-    @PutMapping("/{id}")
-    public ResponseEntity<BugReportDTO> updateBug(@PathVariable Long id, @RequestBody BugReportDTO dto) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println("Updating bug report with ID: " + id);
-        System.out.println("New Title: " + dto.getTitle());
-        BugReportDTO updatedBug = bugReportService.updateBug(id, dto);
+@Transactional
+@PutMapping("/{id}")
+public ResponseEntity<BugReportDTO> updateBug(
+        @PathVariable Long id,
+        @RequestBody BugReportDTO dto) {
+            
+        System.out.println("Incoming DTO status = in controller" + dto.getStatus());
+        System.out.println(dto.getClass().getName());
 
-        auditLogService.log(
-                updatedBug.getReporter(),
-                "UPDATE",
-                "Bug",
-                updatedBug.getId().toString(),
-                RequestUtil.getClientIp()
-        );
 
-        return ResponseEntity.ok(updatedBug);
-    }
+    BugReportDTO updatedBug = bugReportService.updateBug(id, dto);
+    System.out.println("After update, entity status = in controller" + updatedBug.getStatus());
+    auditLogService.log(
+            updatedBug.getReporter(),
+            "UPDATE",
+            "Bug",
+            updatedBug.getId().toString(),
+            RequestUtil.getClientIp()
+    );
+
+    return ResponseEntity.ok(updatedBug);
+}
+
+
+
 }

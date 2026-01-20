@@ -19,6 +19,7 @@ import { AdminRateLimitsComponent } from './admin-rate-limits/admin-rate-limits.
 import { ErrorPageComponent } from './error-page/error-page.component';
 import { HowItWorksComponent } from './how-it-works/how-it-works.component';
 import { BugViewComponent } from './bug-view/bug-view.component';
+import { ContactUsComponent } from './contact-us/contact-us.component';
 
 export const routes: Routes = [
   {
@@ -71,6 +72,7 @@ export const routes: Routes = [
 { path: 'error', component: ErrorPageComponent, data: { code: '500', message: 'Server Error' } },
 
 {path : 'how-it-works', component: HowItWorksComponent },
+{ path: 'contact-us', component: ContactUsComponent },
 { path: '**', redirectTo: 'not-found' }
 
 

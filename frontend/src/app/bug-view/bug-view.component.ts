@@ -35,6 +35,7 @@ export class BugViewComponent implements OnInit {
     this.bugService.getBugById(id).subscribe({
       next: (data) => {
         this.bug = data;
+        console.log(this.bug);
         this.loading = false;
       },
       error: () => {

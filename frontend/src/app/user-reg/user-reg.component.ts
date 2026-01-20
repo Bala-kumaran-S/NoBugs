@@ -4,6 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NotifyService } from '../services/notify.service';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-user-reg',
@@ -45,7 +46,7 @@ export class UserRegComponent {
     this.submitting = true;
     this.notify.info('Creating your account...');
 
-    const apiUrl = 'http://localhost:8080/api/auth/register';
+    const apiUrl = `${environment.apiBaseUrl}/api/auth/register`;
 
     this.http.post(apiUrl, this.registrationForm.value).subscribe({
       next: () => {

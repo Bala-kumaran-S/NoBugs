@@ -29,17 +29,16 @@ public class BugReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 36) 
-    private String uniqueId; 
+    @Column(nullable = false, unique = true, length = 36, updatable = false)
+    private String uniqueId;
 
-    
-    @ManyToOne // A bug report has one reporter.
-    @JoinColumn(name = "reporter_user_id", nullable = false)
-    private User reporter; 
+    @ManyToOne
+    @JoinColumn(name = "reporter_user_id", nullable = false, updatable = false)
+    private User reporter;
 
-    @ManyToOne // A bug report belongs to one scope.
-    @JoinColumn(name = "scope_id", nullable = false) 
-    private Scope scope; 
+    @ManyToOne
+    @JoinColumn(name = "scope_id", nullable = false, updatable = false)
+    private Scope scope;
 
     @Column(nullable = false, length = 255) 
     private String title;
@@ -84,9 +83,4 @@ protected void onCreate() {
     }
 }
 
-
-    public void setSeverity(String severity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSeverity'");
-    }
 }

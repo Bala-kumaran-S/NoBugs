@@ -2,6 +2,7 @@ package com.NoBugs.backend.config;
 
 import com.NoBugs.backend.entity.*;
 import com.NoBugs.backend.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 
 @Component
+@Profile("seed")
+@RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
     private final UserRepository userRepo;
@@ -22,95 +25,90 @@ public class DataSeeder implements CommandLineRunner {
 
     private final Random random = new Random();
 
-    public DataSeeder(UserRepository userRepo,
-                      OrganizationRepository orgRepo,
-                      ScopeRepository scopeRepo,
-                      BugReportRepository bugRepo,
-                      PasswordEncoder passwordEncoder) {
-        this.userRepo = userRepo;
-        this.orgRepo = orgRepo;
-        this.scopeRepo = scopeRepo;
-        this.bugRepo = bugRepo;
-        this.passwordEncoder = passwordEncoder;
-    }
-
     @Override
     public void run(String... args) {
-        if(1 == 1) return;
 
-        System.out.println("Seeding database...");
-        
-        User r1 = getOrCreateUser("alice", "alice@test.com", "test123", Role.RESEARCHER);
-        User r2 = getOrCreateUser("bob", "bob@test.com", "test123", Role.RESEARCHER);
-        User r3 = getOrCreateUser("charlie", "charlie@test.com", "test123", Role.RESEARCHER);
+        System.out.println("Seeding realistic demo data...");
 
-        List<User> researchers = List.of(r1, r2, r3);
+        User admin = createUser(
+                "platform_admin",
+                "admin@nobugs-platform.com",
+                "admin123",
+                Role.ADMIN
+        );
 
-        
-        if (orgRepo.count() == 0) {
+        List<User> researchers = List.of(
+                createUser("alice", "alice@researcher.com", "test123", Role.RESEARCHER),
+                createUser("bob", "bob@researcher.com", "test123", Role.RESEARCHER),
+                createUser("charlie", "charlie@researcher.com", "test123", Role.RESEARCHER),
+                createUser("david", "david@researcher.com", "test123", Role.RESEARCHER)
+        );
 
-            for (int orgIndex = 1; orgIndex <= 5; orgIndex++) {
+        List<String> orgNames = List.of(
+                "NovaStack Technologies",
+                "BlueOrbit Systems",
+                "AstraCore Labs",
+                "CloudNest Solutions",
+                "VertexOne Software",
+                "IronGate Security",
+                "ZenithSoft Pvt Ltd",
+                "Nimbus Digital Services"
+        );
 
-                User orgUser = getOrCreateUser(
-                        "org" + orgIndex,
-                        "org" + orgIndex + "@nobugs.com",
-                        "org123",
-                        Role.ORGANIZATION
-                );
+        for (String orgName : orgNames) {
 
-                Organization org = new Organization();
-                org.setName("Organization " + orgIndex);
-                org.setDescription("Demo organization " + orgIndex);
-                org.setContactEmail("security@org" + orgIndex + ".com");
-                org.setRegisteredBy(orgUser);
-                org.setRegisteredByEmail(orgUser.getEmail());
-                org.setPublic(true);
-                org.setIsApproved(true);
+            User orgUser = createUser(
+                    orgName.toLowerCase().replace(" ", "") + "@org.com",
+                    "security@" + domainify(orgName),
+                    "org123",
+                    Role.ORGANIZATION
+            );
 
-                org = orgRepo.save(org);
+            Organization org = new Organization();
+            org.setName(orgName);
+            org.setDescription(orgName + " public bug bounty program");
+            org.setContactEmail("security@" + domainify(orgName));
+            org.setRegisteredBy(orgUser);
+            org.setRegisteredByEmail(orgUser.getEmail());
+            org.setPublic(true);
+            org.setIsApproved(true);
 
-                int scopeCount = randBetween(2, 4);
+            org = orgRepo.save(org);
 
-                for (int s = 1; s <= scopeCount; s++) {
+            int scopeCount = randBetween(2, 5);
 
-                    Scope scope = new Scope();
-                    scope.setOrganization(org);
-                    scope.setTitle("Scope " + s + " of Org " + orgIndex);
-                    scope.setTargetUrl("https://app" + s + ".org" + orgIndex + ".com");
-                    scope.setDescription("Bug bounty scope");
-                    scope.setInScopeRules("All subdomains allowed");
-                    scope.setOutOfScopeRules("DoS, physical attacks");
-                    scope.setType(ScopeType.PUBLIC);
+            for (int i = 0; i < scopeCount; i++) {
 
-                    scope = scopeRepo.save(scope);
+                Scope scope = new Scope();
+                scope.setOrganization(org);
+                scope.setTitle(realisticScopeTitle(i));
+                scope.setTargetUrl(realisticDomain(orgName, i));
+                scope.setDescription("Production asset under bug bounty scope");
+                scope.setInScopeRules("Web, API, auth related vulnerabilities");
+                scope.setOutOfScopeRules("DoS, social engineering, physical attacks");
+                scope.setType(ScopeType.PUBLIC);
 
-                    int bugCount = randBetween(10, 20);
+                scope = scopeRepo.save(scope);
 
-                    for (int b = 0; b < bugCount; b++) {
-                        createBug(scope, researchers.get(random.nextInt(researchers.size())));
-                    }
+                int bugCount = randBetween(3, 6);
+
+                for (int b = 0; b < bugCount; b++) {
+                    createBug(scope, researchers.get(random.nextInt(researchers.size())));
                 }
             }
-
-            System.out.println("Organizations, scopes and bugs seeded.");
-        } else {
-            System.out.println("Organizations already exist. Skipping org/scope/bug seeding.");
         }
 
-        System.out.println("Seeding finished.");
+        System.out.println("Demo data seeding completed.");
     }
 
-    private User getOrCreateUser(String username, String email, String password, Role role) {
-
-        return userRepo.findByEmail(email).orElseGet(() -> {
-            User u = new User();
-            u.setUsername(username);
-            u.setEmail(email);
-            u.setPassword(passwordEncoder.encode(password));
-            u.setRole(role);
-            u.setReputationPoints(0);
-            return userRepo.save(u);
-        });
+    private User createUser(String username, String email, String password, Role role) {
+        User u = new User();
+        u.setUsername(username);
+        u.setEmail(email);
+        u.setPassword(passwordEncoder.encode(password));
+        u.setRole(role);
+        u.setReputationPoints(0);
+        return userRepo.save(u);
     }
 
     private void createBug(Scope scope, User reporter) {
@@ -119,16 +117,32 @@ public class DataSeeder implements CommandLineRunner {
         bug.setScope(scope);
         bug.setReporter(reporter);
         bug.setTitle(randomBugTitle());
-        bug.setDescription("Automatically generated vulnerability report.");
+        bug.setDescription("Security vulnerability identified during testing.");
         bug.setReporterSeverity(randomSeverity());
-        bug.setStepsToReproduce("1. Open endpoint\n2. Send payload\n3. Observe issue");
-        bug.setStatus(BugStatus.SUBMITTED);
-
+        bug.setStepsToReproduce(
+                "1. Access the endpoint\n" +
+                "2. Inject crafted payload\n" +
+                "3. Observe unexpected behavior"
+        );
+        bug.setStatus(randomStatus());
         bug.setSubmittedAt(
-                LocalDateTime.now().minusDays(randBetween(1, 60))
+                LocalDateTime.now().minusDays(randBetween(1, 45))
         );
 
         bugRepo.save(bug);
+    }
+
+    private String randomBugTitle() {
+        String[] titles = {
+                "Reflected XSS in search endpoint",
+                "IDOR in user profile API",
+                "Broken access control in admin panel",
+                "JWT token reuse vulnerability",
+                "Missing rate limiting on login",
+                "File upload validation bypass",
+                "Open redirect in OAuth flow"
+        };
+        return titles[random.nextInt(titles.length)];
     }
 
     private Severity randomSeverity() {
@@ -136,20 +150,43 @@ public class DataSeeder implements CommandLineRunner {
         return values[random.nextInt(values.length)];
     }
 
+    private BugStatus randomStatus() {
+        BugStatus[] statuses = {
+                BugStatus.SUBMITTED,
+                BugStatus.IN_REVIEW,
+                BugStatus.ACCEPTED,
+                BugStatus.DUPLICATE,
+                BugStatus.INFORMATIONAL
+        };
+        return statuses[random.nextInt(statuses.length)];
+    }
+
     private int randBetween(int min, int max) {
         return random.nextInt(max - min + 1) + min;
     }
 
-    private String randomBugTitle() {
-        String[] titles = {
-                "SQL Injection in login",
-                "Stored XSS in profile",
-                "IDOR in API endpoint",
-                "Broken access control",
-                "CSRF on settings page",
-                "File upload bypass",
-                "Open redirect vulnerability"
+    private String domainify(String orgName) {
+        return orgName.toLowerCase().replace(" ", "").replace("pvtltd", "") + ".com";
+    }
+
+    private String realisticScopeTitle(int index) {
+        return switch (index) {
+            case 0 -> "Main Web Application";
+            case 1 -> "Public REST API";
+            case 2 -> "Authentication Service";
+            case 3 -> "Admin Dashboard";
+            default -> "Mobile Backend";
         };
-        return titles[random.nextInt(titles.length)];
+    }
+
+    private String realisticDomain(String orgName, int index) {
+        String base = domainify(orgName);
+        return switch (index) {
+            case 0 -> "https://www." + base;
+            case 1 -> "https://api." + base;
+            case 2 -> "https://auth." + base;
+            case 3 -> "https://admin." + base;
+            default -> "https://mobile." + base;
+        };
     }
 }

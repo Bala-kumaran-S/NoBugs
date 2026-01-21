@@ -11,14 +11,16 @@ RUN npm run build --configuration=production
 # ---------- runtime stage ----------
 FROM nginx:alpine
 
-# Force rebuilds when needed
 ARG CACHE_BUST=1
 
-# Copy Angular build output (matches angular.json)
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+# 🔴 REMOVE default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy nginx config (NO templates, NO envsubst)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# ✅ COPY your nginx config
+COPY nginx.conf /etc/nginx/conf.d/app.conf
+
+# ✅ COPY Angular build output
+COPY --from=build /app/dist/frontend /usr/share/nginx/html
 
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

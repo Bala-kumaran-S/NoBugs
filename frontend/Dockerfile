@@ -1,6 +1,5 @@
-# ---------- build stage ----------
+# ---------- build ----------
 FROM node:18-alpine AS build
-
 WORKDIR /app
 
 COPY package*.json ./
@@ -9,19 +8,16 @@ RUN npm install
 COPY . .
 RUN npm run build --configuration=production
 
+# ---------- runtime ----------
 FROM nginx:alpine
 
-
-COPY nginx.conf /etc/nginx/templates/default.conf.template
-
-
+COPY nginx.conf /nginx.conf
 COPY --from=build /app/dist/frontend /usr/share/nginx/html
-
-RUN echo "==== Contents of /usr/share/nginx/html ====" \
- && ls -la /usr/share/nginx/html \
- && echo "========================================"
 
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
-
+CMD sh -c '\
+  echo "PORT=$PORT"; \
+  envsubst < /nginx.conf > /etc/nginx/conf.d/default.conf; \
+  nginx -g "daemon off;" \
+'

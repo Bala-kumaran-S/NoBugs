@@ -1,3 +1,5 @@
+ARG CACHE_BUST=1
+
 FROM alpine:3.19
 
 RUN apk add --no-cache busybox-extras

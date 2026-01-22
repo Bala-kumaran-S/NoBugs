@@ -27,7 +27,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,49 +42,47 @@ public class SecurityConfig {
         return new GrantedAuthorityDefaults(""); // Remove ROLE_ prefix
     }
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            JwtAuthenticationFilter jwtAuthFilter,
+            RateLimitFilter rateLimitFilter) throws Exception {
 
-     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter, RateLimitFilter rateLimitFilter) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
-            .csrf(csrf -> csrf.disable()) // Disable CSRF for APIs
-            .authorizeHttpRequests(auth -> auth
-            .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-            .requestMatchers("/api/auth/**").permitAll()
-            .anyRequest().authenticated()
-        )
-
-            .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth -> auth
+                        // 🔴 THIS MUST BE FIRST
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().authenticated())
+                // 🔴 Filters AFTER CORS + OPTIONS
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
-public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration config = new CorsConfiguration();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
 
-    config.setAllowedOrigins(List.of(
-        "http://localhost:4200",
-        "https://nobugs-frontend-production.up.railway.app"
-    ));
+        config.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "https://nobugs-frontend-production.up.railway.app"));
 
-    config.setAllowedMethods(List.of(
-        "GET", "POST", "PUT", "DELETE", "OPTIONS"
-    ));
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-    config.setAllowedHeaders(List.of(
-        "Authorization", "Content-Type"
-    ));
+        config.setAllowedHeaders(List.of(
+                "Authorization", "Content-Type"));
 
-    config.setAllowCredentials(true);
+        config.setAllowCredentials(true);
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", config);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
 
-    return source;
-}
+        return source;
+    }
 
-    
 }

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://nobugs-backend.up.railway.app'
+  apiBaseUrl: 'https://tranquil-charisma-production-4208.up.railway.app/'
 };

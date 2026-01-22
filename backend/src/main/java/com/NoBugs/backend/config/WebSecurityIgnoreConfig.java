@@ -10,6 +10,7 @@ public class WebSecurityIgnoreConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
+        System.out.println(">>> WebSecurityCustomizer LOADED");
         return web -> web.ignoring()
                 .requestMatchers(HttpMethod.OPTIONS, "/**");
     }

@@ -22,6 +22,7 @@ public class GlobalCorsFilter {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public CorsFilter corsFilter() {
+        System.out.println(">>> GLOBAL CORS FILTER LOADED");
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(

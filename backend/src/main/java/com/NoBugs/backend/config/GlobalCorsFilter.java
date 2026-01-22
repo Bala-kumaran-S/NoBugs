@@ -24,44 +24,16 @@ public class GlobalCorsFilter {
     public CorsFilter corsFilter() {
 
         CorsConfiguration config = new CorsConfiguration();
-
         config.setAllowedOrigins(List.of(
-            "http://localhost:4200",
-            "https://nobugs-frontend-production.up.railway.app"
-        ));
-
-        config.setAllowedMethods(List.of(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS"
-        ));
-
-        config.setAllowedHeaders(List.of(
-            "Authorization",
-            "Content-Type"
-        ));
-
+                "http://localhost:4200",
+                "https://nobugs-frontend-production.up.railway.app"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
-        config.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
-        // 🔴 IMPORTANT PART: stop OPTIONS before Spring Security
-        return new CorsFilter(source) {
-            @Override
-            protected void doFilterInternal(
-                    HttpServletRequest request,
-                    HttpServletResponse response,
-                    FilterChain filterChain
-            ) throws ServletException, IOException {
-
-                if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    return; // ⛔ do NOT continue filter chain
-                }
-
-                super.doFilterInternal(request, response, filterChain);
-            }
-        };
+        return new CorsFilter(source);
     }
 }

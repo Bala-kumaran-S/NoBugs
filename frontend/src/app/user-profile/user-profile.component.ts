@@ -4,6 +4,9 @@ import { UserDTO } from '../services/user.service';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environment/environment';  
+import { NotifyService } from '../services/notify.service';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -17,9 +20,8 @@ export class UserProfileComponent implements OnInit {
 
   user: UserDTO | null = null; // <-- Add this line
 
-  defaultProfileImage = 'https://ui-avatars.com/api/?name=User&background=00c6ff&color=fff&size=128';
-
-  constructor(private userService: UserService, private router: Router, private http: HttpClient) { }
+  defaultProfileImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2nhWBc7DS2jvf_JW8hoy1U_WR9b_If5ZzCw&s'; // Placeholder image URL
+  constructor(private userService: UserService, private router: Router, private http: HttpClient, private notify: NotifyService) { }
   
   ngOnInit() {
     const token = localStorage.getItem('token');
@@ -46,11 +48,38 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
-    logout() {
-      this.http.post('/api/auth/logout', {}).subscribe({
-        complete: () => {
+
+  updateProf() {
+    this.router.navigate(['/profile/edit']);
+  }
+  
+  logout() {
+      const token = localStorage.getItem('token');
+  
+      this.notify.info('Signing out...');
+  
+      this.http.post(
+        `${environment.apiBaseUrl}/api/auth/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      ).subscribe({
+        next: () => {
           localStorage.removeItem('token');
-          this.user = null;
+          localStorage.removeItem('refreshToken');
+  
+          //this.notify.success('Logged out');
+          this.router.navigate(['/login']);
+        },
+        error: () => {
+          // even if backend fails, clear local session
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+  
+          this.notify.info('Session cleared locally');
           this.router.navigate(['/login']);
         }
       });

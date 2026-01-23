@@ -10,5 +10,6 @@ public class UserDTO {
     private String username;
     private String email;
     private Integer reputationPoints;
-    private String role; 
+    private String role;
+    private String profileImage; 
 }

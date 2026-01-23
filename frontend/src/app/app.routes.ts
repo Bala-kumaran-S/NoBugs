@@ -20,6 +20,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { HowItWorksComponent } from './how-it-works/how-it-works.component';
 import { BugViewComponent } from './bug-view/bug-view.component';
 import { ContactUsComponent } from './contact-us/contact-us.component';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 export const routes: Routes = [
   {
@@ -61,6 +62,10 @@ export const routes: Routes = [
 },
 
   { path: 'user-profile', component: UserProfileComponent },
+  {
+  path: 'profile/edit',
+  component: EditProfileComponent
+},
   { path: '', component: HomePageComponent },
 
   { path: 'admin/audit-logs', component: AdminAuditLogsComponent },

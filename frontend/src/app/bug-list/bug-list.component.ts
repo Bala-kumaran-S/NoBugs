@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ResearchDashService, BugReport } from '../services/research-dash.service';
+import { ResearchDashService } from '../services/research-dash.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { NotifyService } from '../services/notify.service';
+import { BugReportDTO } from '../services/bug.service';
 
 @Component({
   selector: 'app-my-bugs',
@@ -13,7 +14,7 @@ import { NotifyService } from '../services/notify.service';
 })
 export class BugListComponent implements OnInit {
 
-  bugReports: BugReport[] = [];
+  bugReports: BugReportDTO[] = [];
   loadingBugs = true;
   private firstLoad = true;
 
@@ -33,6 +34,7 @@ export class BugListComponent implements OnInit {
     this.dashboardService.getMyBugReports().subscribe({
       next: bugs => {
         this.bugReports = bugs;
+        console.log('Bug reports loaded:', bugs);
         this.loadingBugs = false;
 
         if (this.firstLoad) {
@@ -47,7 +49,7 @@ export class BugListComponent implements OnInit {
     });
   }
 
-  viewBug(bug: BugReport) {
+  viewBug(bug: BugReportDTO) {
     this.router.navigate(['/researcher/bugs', bug.id]);
   }
 }

@@ -1,0 +1,88 @@
+<div class="container mt-5" *ngIf="user">
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4>Edit Profile</h4>
+    </div>
+
+    <div class="card-body">
+      <form (ngSubmit)="updateProfile()">
+
+        <!-- Username (editable) -->
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.username"
+            name="username"
+            required
+          />
+        </div>
+
+        <!-- Email (readonly) -->
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            [value]="user.email"
+            disabled
+          />
+        </div>
+
+        <!-- Role (readonly) -->
+        <div class="mb-3">
+          <label class="form-label">Role</label>
+          <input
+            type="text"
+            class="form-control"
+            [value]="user.role"
+            disabled
+          />
+        </div>
+
+        <!-- Profile Image -->
+        <div class="mb-3">
+          <label class="form-label">Profile Image URL</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="user.profileImage"
+            name="profileImage"
+          />
+        </div>
+
+        <!-- Preview -->
+        <div class="mb-3 text-center" *ngIf="user.profileImage">
+          <img
+            [src]="user.profileImage"
+            alt="Profile Preview"
+            class="rounded-circle"
+            width="100"
+            height="100"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex gap-2">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="loading"
+          >
+            {{ loading ? 'Saving...' : 'Save Changes' }}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="cancel()"
+          >
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

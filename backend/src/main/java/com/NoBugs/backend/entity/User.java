@@ -50,6 +50,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Column(length = 512)
+    private String profileImage;
+    
     @PrePersist
     protected void onCreate() {
         registeredAt = LocalDateTime.now();

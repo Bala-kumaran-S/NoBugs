@@ -18,7 +18,7 @@ export interface BugReportDTO {
   stepsToReproduce: string;
   attachmentUrl1?: string;
   submittedAt?: string;
-  status?: string;
+  status?: 'SUBMITTED' | 'IN_REVIEW' | 'ACCEPTED' | 'INVALID' | 'DUPLICATE' | 'INFORMATIONAL' | 'NOT_APPLICABLE';
   adminNotes?: string;
 }
 

@@ -1,0 +1,9 @@
+.card {
+  max-width: 600px;
+  margin: auto;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}

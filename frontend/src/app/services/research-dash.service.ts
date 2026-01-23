@@ -18,13 +18,23 @@ export interface ScopeSummary {
 }
 
 export interface BugReport {
-  id: number;
+  id?: number;
+  uniqueId?: string;
+  scopeId: number;
+  scopeTitle?: string;
+  organizationName?: string;
+  reporter?: number;
   title: string;
-  scopeTitle: string;
-  organizationName: string;
-  status: string;
-  severity?: string;
-  submittedAt: string;
+  description: string;
+  reporterSeverity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  adminSeverity?: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  affectedEndpoint?: string;
+  stepsToReproduce: string;
+  attachmentUrl1?: string;
+  submittedAt?: string;
+  status?: 'SUBMITTED' | 'IN_REVIEW' | 'ACCEPTED' | 'INVALID' | 'DUPLICATE' | 'INFORMATIONAL' | 'NOT_APPLICABLE';
+  adminNotes?: string;
+
 }
 
 @Injectable({

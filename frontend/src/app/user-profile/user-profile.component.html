@@ -1,7 +1,7 @@
 <div class="profile-container">
   <div class="profile-card shadow-lg">
     <div class="profile-header">
-      <img [src]="user?.profileImage || defaultProfileImage" alt="Profile" class="profile-img" />
+      <img [src]="user?.profileImage" alt="Profile" class="profile-img" />
       <div>
         <h2 class="profile-username">{{ user?.username }}</h2>
         <span class="profile-role badge" [ngClass]="{
@@ -23,8 +23,8 @@
       
     </div>
     <div class="profile-actions">
-      <button class="btn btn-outline-primary me-2"><i class="bi bi-pencil"></i> Edit Profile</button>
-      <button class="btn btn-outline-danger" onclick="logout()"><i class="bi bi-box-arrow-right" ></i> Logout</button>
+      <button class="btn btn-outline-primary me-2" (click)="updateProf()"><i class="bi bi-pencil"></i> Edit Profile</button>
+      <button class="btn btn-outline-danger" (click)="logout()"><i class="bi bi-box-arrow-right" ></i> Logout</button>
     </div>
   </div>
 </div>

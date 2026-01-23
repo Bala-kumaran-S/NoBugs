@@ -1,64 +1,76 @@
-
-
-<div *ngIf="loadingBugs" class="alert alert-info text-center" role="alert">
+<div *ngIf="loadingBugs" class="alert alert-info text-center">
   Loading bug reports...
 </div>
 
-  <div *ngIf="!loadingBugs && bugReports?.length === 0" class="alert alert-secondary text-center" role="alert">
+<div *ngIf="!loadingBugs && bugReports.length === 0"
+     class="alert alert-secondary text-center">
   You haven't submitted any bug reports yet.
 </div>
 
-<div *ngIf="!loadingBugs" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 total">
-  <div *ngFor="let bug of bugReports" class="col">
-    <div class="card h-100 shadow bug-card">
-      <div class="card-header d-flex justify-content-between align-items-center bug-card-header">
-        <div>
-          <span class="badge rounded-pill me-2"
-                [ngClass]="{
-                  'bg-success': bug?.status === 'RESOLVED',
-                  'bg-warning text-dark': bug?.status === 'IN_PROGRESS',
-                  'bg-danger': bug?.status === 'REJECTED',
-                  'bg-secondary': bug?.status !== 'RESOLVED' && bug?.status !== 'IN_PROGRESS' && bug?.status !== 'REJECTED'
-                }">
-            {{ bug?.status | titlecase }}
-          </span>
-          <span class="bug-title">{{ bug?.title }}</span>
-        </div>
-        <span class="badge severity-badge"
-              [ngClass]="{
-                'bg-danger': bug?.severity === 'CRITICAL',
-                'bg-warning text-dark': bug?.severity === 'HIGH',
-                'bg-info text-dark': bug?.severity === 'MEDIUM',
-                'bg-secondary': !bug?.severity || bug?.severity === 'LOW'
-              }">
-          {{ bug?.severity || 'Unassigned' }}
+<div *ngIf="!loadingBugs" class="bug-list-container">
+
+  <div class="bug-row" *ngFor="let bug of bugReports">
+
+    <div class="bug-card">
+
+      <!-- HEADER -->
+      <div class="bug-header">
+        <span
+          class="status"
+          [ngClass]="{
+            'status-submitted': bug.status === 'SUBMITTED',
+            'status-review': bug.status === 'IN_REVIEW',
+            'status-accepted': bug.status === 'ACCEPTED',
+            'status-invalid': bug.status === 'INVALID',
+            'status-dup': bug.status === 'DUPLICATE'
+          }">
+          {{ bug.status | titlecase }}
+        </span>
+
+        <span
+          class="severity"
+          [ngClass]="{
+            'sev-critical': (bug.adminSeverity || bug.reporterSeverity) === 'CRITICAL',
+            'sev-high': (bug.adminSeverity || bug.reporterSeverity) === 'HIGH',
+            'sev-medium': (bug.adminSeverity || bug.reporterSeverity) === 'MEDIUM',
+            'sev-low': (bug.adminSeverity || bug.reporterSeverity) === 'LOW'
+          }">
+          {{ bug.adminSeverity || bug.reporterSeverity || 'Unassigned' }}
         </span>
       </div>
-      <div class="card-body">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            <strong>Scope:</strong> {{ bug?.scopeTitle }}
-          </li>
-          <li class="list-group-item">
-            <strong>Organization:</strong> {{ bug?.organizationName }}
-          </li>
-          <li class="list-group-item">
-            <strong>Submitted:</strong>
-            <span class="text-muted">{{ bug?.submittedAt | date:'medium' }}</span>
-          </li>
-        </ul>
-        
+
+      <!-- MAIN -->
+      <div class="bug-main">
+        <div class="bug-title">
+          {{ bug.title }}
+        </div>
+        <div>
+          {{ bug.description | slice:0:100 }}{{ bug.description.length > 100 ? '...' : '' }}
+        </div>
+        <div>
+          
+        </div>
+        <div class="bug-meta">
+          <div><strong>Scope:</strong> {{ bug.scopeTitle }}</div>
+          <div><strong>Organization:</strong> {{ bug.organizationName }}</div>
+          <div class="date">
+            Submitted {{ bug.submittedAt | date:'medium' }}
+          </div>
+        </div>
       </div>
-      <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
-        <span class="text-muted small">ID: {{ bug?.id }}</span>
+
+      <!-- FOOTER -->
+      <div class="bug-footer">
+        <span class="bug-id">#{{ bug.id }}</span>
+
         <a
-          class="btn btn-sm"
+          class="btn btn-outline-primary btn-sm"
           [routerLink]="['/researcher/bugs', bug.id]">
-          View Details
+          View Details →
         </a>
-
-
       </div>
+
     </div>
+
   </div>
 </div>

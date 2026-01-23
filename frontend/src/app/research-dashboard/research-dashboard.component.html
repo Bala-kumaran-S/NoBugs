@@ -1,23 +1,30 @@
 <div class="dashboard-container">
   <section>
-    <h2>Public Organizations & Scopes</h2>
-    <form class="form-inline my-2 my-lg-0 searchf" (submit)="$event.preventDefault()">
-      <input
-        class="form-control mr-sm-2 searcht"
-        type="search"
-        placeholder="Search"
-        aria-label="Search"
-        [(ngModel)]="searchTerm"
-        (ngModelChange)="onSearchChange()"
-        name="search"
-      >
-      <button class="btn btn-outline-success my-2 my-sm-0 search" type="submit">Search</button>
-    </form>
+   
+    <div class="header-row">
+      <h2>Public Organizations & Scopes</h2>
+
+      <form class="searchf" (submit)="$event.preventDefault()">
+        <input
+          class="form-control searcht"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          name="search"
+        >
+        <button class="btn btn-outline-success search" type="submit">
+          Search
+        </button>
+      </form>
+    </div>
+
     <div *ngIf="loadingOrgs">Loading organizations...</div>
     <div *ngIf="!loadingOrgs && filteredOrganizations.length === 0">No public organizations found.</div>
     <div *ngIf="!loadingOrgs && filteredOrganizations.length > 0">
       <div *ngFor="let org of filteredOrganizations" class="org-card" [@listAnimation]>
-        <a href=""><h3>{{ org.name }}</h3></a>
+        <h3>{{ org.name }}</h3>
         
         <p>{{ org.description }}</p>
         <ul>

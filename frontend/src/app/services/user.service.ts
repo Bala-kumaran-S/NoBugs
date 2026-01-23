@@ -26,4 +26,22 @@ export class UserService {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.get<UserDTO>(`${environment.apiBaseUrl}/api/users/email/${email}`, { headers });
   }
+
+  updateUser(user: UserDTO): Observable<UserDTO> {
+    if (!user.id) {
+      throw new Error('User ID is required for update');
+    }
+
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put<UserDTO>(
+      `${environment.apiBaseUrl}/api/users/${user.id}`,
+      user,
+      { headers }
+    );
+  }
 }

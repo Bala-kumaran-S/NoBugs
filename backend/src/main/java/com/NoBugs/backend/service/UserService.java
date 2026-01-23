@@ -53,6 +53,7 @@ public class UserService implements UserDetailsService {
             existing.setUsername(updatedUser.getUsername());
             existing.setEmail(updatedUser.getEmail());
             existing.setReputationPoints(updatedUser.getReputationPoints());
+            existing.setProfileImage(updatedUser.getProfileImage());
             User saved = userRepository.save(existing);
             return mapToDTO(saved);
         });
@@ -65,7 +66,7 @@ public class UserService implements UserDetailsService {
     }
 
     private UserDTO mapToDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getReputationPoints(), user.getRole().name());
+        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getReputationPoints(), user.getRole().name(), user.getProfileImage());
     }
 
     public Optional<UserDTO> getUserByUsername(String username) {

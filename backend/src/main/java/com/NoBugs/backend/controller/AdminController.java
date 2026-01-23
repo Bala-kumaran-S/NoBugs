@@ -39,13 +39,13 @@ public class AdminController {
     }
 
     @GetMapping("/rate-limits")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Set<String> getBlockedIps() {
         return rateLimitFilter.getBlockedIps();
     }
 
     @DeleteMapping("/rate-limits/{ip}")
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void unblockIp(@PathVariable String ip) {
         rateLimitFilter.unblockIp(ip);
     }

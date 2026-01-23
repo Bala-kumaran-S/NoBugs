@@ -34,7 +34,9 @@ public class RateLimitFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
+
                 if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+                    System.out.println(">>> RATE LIMIT FILTER OPTIONS REQUEST - SKIPPING");
                     response.setStatus(HttpServletResponse.SC_OK);
                     return;
                 }

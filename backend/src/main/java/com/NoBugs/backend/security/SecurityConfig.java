@@ -3,6 +3,8 @@ package com.NoBugs.backend.security;
 import com.NoBugs.backend.security.JwtAuthenticationFilter;
 import com.NoBugs.backend.service.UserService;
 
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +54,7 @@ public SecurityFilterChain securityFilterChain(
 
     http
         .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()
@@ -62,6 +65,38 @@ public SecurityFilterChain securityFilterChain(
 
     return http.build();
 }
+
+@Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOrigins(List.of(
+            "https://nobugs-frontend-production.up.railway.app",
+            "http://localhost:4200"
+        ));
+
+        config.setAllowedMethods(List.of(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+
+        config.setAllowedHeaders(List.of(
+            "Authorization",
+            "Content-Type"
+        ));
+
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
+
+    @PostConstruct
+    public void logSecurityStartup() {
+        System.out.println(">>> SECURITY CONFIG LOADED");
+    }
 
 
 }

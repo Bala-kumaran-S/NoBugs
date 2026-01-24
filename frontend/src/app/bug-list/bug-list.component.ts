@@ -34,7 +34,7 @@ export class BugListComponent implements OnInit {
     this.dashboardService.getMyBugReports().subscribe({
       next: bugs => {
         this.bugReports = bugs;
-        console.log('Bug reports loaded:', bugs);
+        //console.log('Bug reports loaded:', bugs);
         this.loadingBugs = false;
 
         if (this.firstLoad) {

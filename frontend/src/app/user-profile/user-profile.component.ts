@@ -41,7 +41,7 @@ export class UserProfileComponent implements OnInit {
         if (!this.user.profileImage) {
           this.user.profileImage = this.defaultProfileImage;
         }
-        console.log('User data fetched successfully:', this.user);
+        //console.log('User data fetched successfully:', this.user);
       },
       (error) => {
         console.error('Error fetching user data:', error);

@@ -59,4 +59,22 @@ export class AuthService {
  isAuthenticated(): boolean {
   return this.isLoggedIn();
 }
+
+hasValidToken(): boolean {
+  const token = this.getToken();
+  if (!token) return false;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return !!payload?.sub && !!payload?.role;
+  } catch {
+    return false;
+  }
+}
+
+getEmail(): string | null {
+  const payload = this.getUserInfo();
+  return payload?.sub ?? null;
+}
+
 }

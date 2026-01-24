@@ -45,7 +45,7 @@ export class BugReportReviewComponent implements OnInit {
     this.bugService.getBugById(bugId).subscribe({
       next: bug => {
         this.bug = bug;
-        console.log('Loaded bug report:', this.bug);
+        //console.log('Loaded bug report:', this.bug);
         this.reviewForm.patchValue({
           status: bug.status,
           adminSeverity: bug.adminSeverity || '',

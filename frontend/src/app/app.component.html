@@ -89,8 +89,7 @@
           </li>
 
         </ng-container>
-        <li class="nav-item"
-            *ngIf="hasToken && (userRole === 'RESEARCHER' || userRole === 'ORGANIZATION')">
+        <li class="nav-item">
           <a class="nav-link"
              routerLink="/how-it-works"
              routerLinkActive="active">
@@ -100,60 +99,46 @@
       </ul>
 
       <!-- ================= ACCOUNT (RIGHT) ================= -->
-      <ul class="navbar-nav ms-auto">
+<ul class="navbar-nav ms-auto">
 
-        <li class="nav-item dropdown">
+  <!-- Logged-in -->
+  <li class="nav-item dropdown" *ngIf="hasToken; else guestMenu">
+    <a class="nav-link dropdown-toggle d-flex align-items-center"
+       href="#"
+       role="button"
+       data-bs-toggle="dropdown">
 
-          <a class="nav-link dropdown-toggle d-flex align-items-center account-link"
-             href="#"
-             role="button"
-             data-bs-toggle="dropdown">
+      <i class="bi bi-person-circle me-2"></i>
+      {{ username }}
+      <small class="text-warning ms-1">⭐ {{ reputation }}</small>
+    </a>
 
-            <span class="me-2">
-              <i class="bi bi-person-circle"></i>
-            </span>
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+      <li><a class="dropdown-item" routerLink="/user-profile">User Profile</a></li>
+      <li><a class="dropdown-item" routerLink="/contact-us">Contact Us</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li>
+        <a class="dropdown-item text-danger"
+           href="#"
+           (click)="logout(); $event.preventDefault()">
+          Logout
+        </a>
+      </li>
+    </ul>
+  </li>
 
-            <ng-container *ngIf="hasToken; else guestLabel">
-              {{ username }}
-              <small class="text-warning ms-1">⭐ {{ reputation }}</small>
-            </ng-container>
+  <!-- Guest -->
+  <ng-template #guestMenu>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/login">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/register">Register</a>
+    </li>
+  </ng-template>
 
-            <ng-template #guestLabel>
-              Account
-            </ng-template>
+</ul>
 
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-
-            <!-- Guest -->
-            <ng-container *ngIf="!hasToken">
-              <li><a class="dropdown-item" routerLink="/login">Login</a></li>
-              <li><a class="dropdown-item" routerLink="/register">Register</a></li>
-            </ng-container>
-
-            <!-- Logged in -->
-            <ng-container *ngIf="hasToken">
-              <li><a class="dropdown-item" routerLink="/user-profile">User Profile</a></li>
-              <li><a class="dropdown-item" routerLink="/contact-us">Contact Us</a></li>
-
-              <li><hr class="dropdown-divider"></li>
-
-              <li>
-                <a class="dropdown-item text-danger"
-                   href="#"
-                   (click)="logout(); $event.preventDefault()">
-                  Logout
-                </a>
-              </li>
-            </ng-container>
-            
-            
-          </ul>
-        </li>
-
-        
-      </ul>
 
     </div>
   </div>

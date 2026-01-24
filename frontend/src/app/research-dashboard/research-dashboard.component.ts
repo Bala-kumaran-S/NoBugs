@@ -114,7 +114,7 @@ export class ResearchDashboardComponent implements OnInit {
       },
       error: () => {
         this.loadingBugs = false;
-        this.notify.error('Failed to load bug reports.');
+        //this.notify.error('Failed to load bug reports.');
       }
     });
   }

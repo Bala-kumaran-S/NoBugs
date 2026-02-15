@@ -73,17 +73,16 @@ public SecurityFilterChain securityFilterChain(
 
         config.setAllowedOrigins(List.of(
             "https://nobugs-frontend-production.up.railway.app",
-            "http://localhost:4200"
+            "http://localhost:4200",
+            "https://no-bugs.vercel.app"
         ));
 
         config.setAllowedMethods(List.of(
             "GET", "POST", "PUT", "DELETE", "OPTIONS"
         ));
 
-        config.setAllowedHeaders(List.of(
-            "Authorization",
-            "Content-Type"
-        ));
+        config.setAllowedHeaders(List.of("*"));
+
 
         config.setAllowCredentials(true);
 

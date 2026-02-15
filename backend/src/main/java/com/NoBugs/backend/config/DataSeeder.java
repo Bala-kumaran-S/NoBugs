@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Random;
 
 @Component
-@Profile("seed")
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
@@ -28,8 +27,12 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        System.out.println("Seeding realistic demo data...");
+        if (userRepo.count() > 1) {
+        System.out.println("Data already exists. Skipping seeding.");
+        return;
+        }
 
+        System.out.println("Seeding realistic demo data...");
         User admin = createUser(
                 "platform_admin",
                 "admin@nobugs-platform.com",

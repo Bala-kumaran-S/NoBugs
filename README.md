@@ -9,8 +9,8 @@ This project focuses on **backend security, authentication, authorization, and p
 
 ## Live Demo
 
-Frontend: https://nobugs-frontend-production.up.railway.app/  
-Backend API: https://tranquil-charisma-production-4208.up.railway.app/
+Frontend: https://no-bugs.vercel.app/ 
+Backend API: https://nobugs-unu9.onrender.com 
 
 ---
 

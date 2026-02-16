@@ -59,6 +59,7 @@ public SecurityFilterChain securityFilterChain(
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/orgs/public").permitAll()
+            .requestMatchers(HttpMethod.GET, "/test").permitAll()
             .anyRequest().authenticated()
         )
         .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)

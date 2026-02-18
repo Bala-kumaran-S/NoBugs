@@ -59,7 +59,9 @@ public SecurityFilterChain securityFilterChain(
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/orgs/public").permitAll()
-            .requestMatchers(HttpMethod.GET, "/test").permitAll()
+            .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+            .requestMatchers(HttpMethod.HEAD, "/actuator/health").permitAll()
+
             .anyRequest().authenticated()
         )
         .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
@@ -79,7 +81,7 @@ public SecurityFilterChain securityFilterChain(
         ));
 
         config.setAllowedMethods(List.of(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS"
+            "GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"
         ));
 
         config.setAllowedHeaders(List.of("*"));

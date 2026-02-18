@@ -59,8 +59,8 @@ public SecurityFilterChain securityFilterChain(
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/orgs/public").permitAll()
-            .requestMatchers(HttpMethod.GET, "/actuator/health").permitAll()
-            .requestMatchers(HttpMethod.HEAD, "/actuator/health").permitAll()
+            .requestMatchers(HttpMethod.GET, "/test").permitAll()
+            .requestMatchers(HttpMethod.HEAD, "/test").permitAll()
 
             .anyRequest().authenticated()
         )
